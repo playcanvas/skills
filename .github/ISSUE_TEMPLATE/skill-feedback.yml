@@ -1,0 +1,62 @@
+name: Skill feedback
+description: Report a repeatable PlayCanvas-specific gap in a skill.
+title: "[skill]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve PlayCanvas Skills. Do not include private code, assets, or credentials.
+
+  - type: input
+    id: skill
+    attributes:
+      label: Skill
+      description: Which skill was used?
+      placeholder: build-app
+    validations:
+      required: true
+
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Authoring surface
+      options:
+        - Direct Engine
+        - React
+        - Web Components
+        - Multiple or unknown
+    validations:
+      required: true
+
+  - type: input
+    id: versions
+    attributes:
+      label: Package versions
+      description: Include playcanvas and any PlayCanvas framework packages involved.
+      placeholder: playcanvas 2.x, @playcanvas/react 0.x
+    validations:
+      required: true
+
+  - type: textarea
+    id: prompt
+    attributes:
+      label: Task prompt
+      description: Provide the smallest prompt that reproduces the result.
+    validations:
+      required: true
+
+  - type: textarea
+    id: result
+    attributes:
+      label: Observed result
+      description: Describe the generated behavior and attach relevant code, diagnostics, screenshots, or a reproducible project.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected improvement
+      description: What is the smallest PlayCanvas-specific behavior the skill should teach or correct?
+    validations:
+      required: true

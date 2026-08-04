@@ -1,0 +1,12 @@
+{
+    "name": "engine",
+    "version": "0.0.0",
+    "description": "Skills for building applications with PlayCanvas Engine",
+    "author": {
+        "name": "PlayCanvas"
+    },
+    "homepage": "https://playcanvas.com",
+    "repository": "https://github.com/playcanvas/skills",
+    "license": "MIT",
+    "keywords": ["playcanvas", "3d", "webgl", "webgpu", "game-engine"]
+}

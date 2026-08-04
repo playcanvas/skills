@@ -1,0 +1,18 @@
+{
+    "name": "playcanvas",
+    "owner": {
+        "name": "PlayCanvas",
+        "email": "support@playcanvas.com"
+    },
+    "metadata": {
+        "description": "Skills for building with PlayCanvas products",
+        "version": "0.0.0"
+    },
+    "plugins": [
+        {
+            "name": "engine",
+            "source": "./plugins/engine",
+            "description": "Skills for building applications with PlayCanvas Engine"
+        }
+    ]
+}
