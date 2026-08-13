@@ -6,7 +6,7 @@
         "url": "https://playcanvas.com"
     },
     "description": "Skills for building with PlayCanvas products",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "plugins": [
         {
             "name": "engine",
