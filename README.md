@@ -1,5 +1,6 @@
 # PlayCanvas Skills
 
+[![Version](https://img.shields.io/github/v/release/playcanvas/skills?label=version)](https://github.com/playcanvas/skills/releases/latest)
 [![License](https://img.shields.io/github/license/playcanvas/skills)](https://github.com/playcanvas/skills/blob/main/LICENSE)
 [![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white&color=black)](https://discord.gg/RSaMRzg)
 [![Reddit](https://img.shields.io/badge/Reddit-FF4500?style=flat&logo=reddit&logoColor=white&color=black)](https://www.reddit.com/r/PlayCanvas)
