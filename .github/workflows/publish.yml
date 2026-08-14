@@ -36,7 +36,7 @@ jobs:
                   owner: playcanvas
                   repositories: create-playcanvas
 
-            - name: Trigger update-skills workflow
+            - name: Trigger skills workflow
               env:
                   GH_TOKEN: ${{ steps.app-token.outputs.token }}
-              run: gh workflow run update-skills.yml --repo playcanvas/create-playcanvas
+              run: gh workflow run skills.yml --repo playcanvas/create-playcanvas
