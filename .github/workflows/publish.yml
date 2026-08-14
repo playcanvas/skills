@@ -21,3 +21,22 @@ jobs:
               with:
                   generate_release_notes: true
                   prerelease: false
+
+    dispatch:
+        name: Trigger skills update
+        runs-on: ubuntu-latest
+        if: ${{ github.repository_owner == 'playcanvas' }}
+        steps:
+            - name: Generate app token
+              id: app-token
+              uses: actions/create-github-app-token@v3
+              with:
+                  app-id: ${{ secrets.APP_ID }}
+                  private-key: ${{ secrets.APP_KEY }}
+                  owner: playcanvas
+                  repositories: create-playcanvas
+
+            - name: Trigger update-skills workflow
+              env:
+                  GH_TOKEN: ${{ steps.app-token.outputs.token }}
+              run: gh workflow run update-skills.yml --repo playcanvas/create-playcanvas
