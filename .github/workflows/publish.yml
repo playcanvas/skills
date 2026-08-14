@@ -22,8 +22,8 @@ jobs:
                   generate_release_notes: true
                   prerelease: false
 
-    dispatch:
-        name: Trigger skills update
+    sync:
+        name: Sync
         runs-on: ubuntu-latest
         if: ${{ github.repository_owner == 'playcanvas' }}
         steps:
@@ -36,7 +36,7 @@ jobs:
                   owner: playcanvas
                   repositories: create-playcanvas
 
-            - name: Trigger skills workflow
+            - name: Sync create-playcanvas skills
               env:
                   GH_TOKEN: ${{ steps.app-token.outputs.token }}
               run: gh workflow run skills.yml --repo playcanvas/create-playcanvas
