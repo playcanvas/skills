@@ -158,7 +158,7 @@ Every integration loads the same canonical files from
 
 ## Requirements and scope
 
-- Node.js 22 or 24 for the bundled GLB inspector and repository checks.
+- Node.js 24 for the bundled GLB inspector and repository checks.
 - Git and an agent or harness that supports the portable `SKILL.md` format.
 - npm/npx only when installing through `skills`, auditing packages, or normalizing compressed GLBs.
 - `rg` and `gh` are recommended for example and repository discovery workflows.
