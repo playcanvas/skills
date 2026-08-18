@@ -172,7 +172,7 @@ workflows and verification boundaries.
 
 ## Validation and evaluation
 
-Repository CI runs the deterministic tests on Node 22 and 24 and validates every canonical skill
+Repository CI runs the deterministic tests on Node 24 and validates every canonical skill
 against the Agent Skills specification. A scheduled contract audit downloads current npm packages
 and checks the exports, declarations, shipped scripts, and component behavior referenced by the
 skills.

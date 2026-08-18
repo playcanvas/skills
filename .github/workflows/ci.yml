@@ -18,21 +18,17 @@ permissions:
 
 jobs:
   test:
-    name: Test / Node ${{ matrix.node }}
+    name: Test
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    strategy:
-      fail-fast: false
-      matrix:
-        node: [22.x, 24.x]
     steps:
       - name: Check out code
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
-      - name: Set up Node.js
+      - name: Set up Node.js 24.x
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 24.x
 
       - name: Run tests
         run: node --test test/*.test.mjs
