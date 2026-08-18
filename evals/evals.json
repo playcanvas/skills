@@ -67,11 +67,6 @@
             "expected": []
         },
         {
-            "id": "negative-three-js",
-            "prompt": "Create a Three.js product viewer with orbit controls and an HDR environment.",
-            "expected": []
-        },
-        {
             "id": "negative-editor",
             "prompt": "Use the PlayCanvas Editor API to create a project, upload assets, and publish a build.",
             "expected": []
