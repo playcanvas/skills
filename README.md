@@ -65,39 +65,20 @@ npx --yes skills add playcanvas/skills --all
 Use `-g` for a user-level installation. Start a new conversation after installing or updating so the
 agent discovers the new skill metadata.
 
-Update or remove generic installations with:
-
-```sh
-npx --yes skills update
-npx --yes skills remove
-```
-
 ### Claude Code and Claude Code desktop
 
 ```sh
 claude plugin marketplace add playcanvas/skills
 claude plugin install engine@playcanvas
-claude plugin details engine@playcanvas
 ```
 
 In the desktop app's Code tab, installed plugins are available under **+ → Plugins**.
-
-```sh
-claude plugin update engine@playcanvas
-claude plugin uninstall engine@playcanvas
-```
 
 ### Codex CLI and app
 
 ```sh
 codex plugin marketplace add playcanvas/skills
 codex plugin add engine@playcanvas
-codex plugin list
-```
-
-```sh
-codex plugin marketplace upgrade playcanvas
-codex plugin remove engine@playcanvas
 ```
 
 The Codex app uses the same marketplace and plugin installation.
@@ -124,17 +105,8 @@ The skills resolve the active surface from imports and markup, then read only it
 | React | `playcanvas`, `@playcanvas/react` | React ownership, hooks, components, assets, Engine interop |
 | Web Components | `playcanvas`, `@playcanvas/web-components` | declarative elements, lifecycle, assets, Engine interop |
 
-Package contracts last verified on **2026-08-18**:
-
-| Package | Verified version |
-| --- | ---: |
-| `playcanvas` | `2.21.4` |
-| `@playcanvas/react` | `0.11.5` |
-| `@playcanvas/web-components` | `0.15.0` |
-
-These are verification points, not hard pins. Skills prefer the packages installed in the target
-project. A scheduled audit checks the latest npm releases for every import and behavior that the
-guidance relies on.
+Skills prefer the packages installed in the target project. A scheduled audit checks selected
+critical contracts against the latest npm releases.
 
 ## Engine skills
 
@@ -156,61 +128,13 @@ guidance relies on.
 Every integration loads the same canonical files from
 [`plugins/engine/skills/`](plugins/engine/skills/). Host manifests contain distribution metadata only.
 
-## Requirements and scope
-
-- Node.js 24 for the bundled GLB inspector and repository checks.
-- Git and an agent or harness that supports the portable `SKILL.md` format.
-- npm/npx only when installing through `skills`, auditing packages, or normalizing compressed GLBs.
-- `rg` and `gh` are recommended for example and repository discovery workflows.
-- macOS and Linux are exercised by the current development and CI paths. Windows users can run the
-  Node tooling directly, but the documented shell examples have not yet been tested end to end in
-  PowerShell.
-
 The beta does not automate the PlayCanvas Editor, create or publish Editor projects, manage cloud
 services, or replace project-specific art direction and gameplay design. It provides Engine coding
 workflows and verification boundaries.
 
-## Validation and evaluation
-
-Repository CI runs the deterministic tests on Node 24 and validates every canonical skill
-against the Agent Skills specification. A scheduled contract audit downloads current npm packages
-and checks the exports, declarations, shipped scripts, and component behavior referenced by the
-skills.
-
-Trigger and behavior cases live in [`evals/evals.json`](evals/evals.json). Focused forward cases for
-the highest-risk workflows live alongside them with explicit grading criteria.
-
-## Development
-
-The repository itself has no install step or runtime dependencies:
-
-```sh
-node --test test/*.test.mjs
-node scripts/audit-packages.mjs
-node scripts/audit-packages.mjs --engine ../engine
-node scripts/smoke-surfaces.mjs
-node scripts/smoke-gltf-transform.mjs
-```
-
-Before distribution, also run:
-
-```sh
-for skill in plugins/engine/skills/*; do
-    uvx --from skills-ref==0.1.1 agentskills validate "$skill"
-done
-claude plugin validate --strict .
-```
-
-When Claude's early-access plugin evaluator is enabled, run the focused forward evaluations
-separately because they invoke a model and may incur cost:
-
-```sh
-claude plugin eval . --ablation with-without --runs 1 --threshold 1
-```
-
 See [CONTRIBUTING.md](CONTRIBUTING.md) for pull-request expectations. Report vulnerabilities through
-[GitHub Security Advisories](https://github.com/playcanvas/skills/security/advisories/new) as
-described in [SECURITY.md](SECURITY.md). For repeatable skill failures, use the
+[GitHub Security Advisories](https://github.com/playcanvas/skills/security/advisories/new). For
+repeatable skill failures, use the
 [skill feedback template](https://github.com/playcanvas/skills/issues/new?template=skill-feedback.yml)
 and include the prompt, surface, package versions, output, and smallest incorrect behavior.
 

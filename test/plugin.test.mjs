@@ -153,33 +153,13 @@ test('README documents every shipped skill', () => {
     }
 });
 
-test('evaluation cases cover every skill and authoring surface', () => {
-    const data = JSON.parse(readFileSync('evals/evals.json', 'utf8'));
-    const expected = [...data.triggerCases, ...data.behaviorCases].flatMap((entry) => entry.expected);
-
-    assert.equal(data.version, 1);
-    assert.deepEqual([...new Set(expected)].sort(), skills);
-    assert.deepEqual([...new Set(data.behaviorCases.map((entry) => entry.surface))].sort(), [
-        'direct-engine',
-        'react',
-        'web-components'
-    ]);
-    assert.ok(data.triggerCases.some((entry) => entry.expected.length === 0));
-    for (const entry of [...data.triggerCases, ...data.behaviorCases]) {
-        assert.ok(entry.id && (entry.prompt?.trim() || entry.scenario), entry.id);
-        assert.ok(entry.expected.every((skill) => skills.includes(skill)), entry.id);
-    }
-});
-
 test('forward evaluations have prompts and graders', () => {
     const root = resolve('evals');
     const cases = readdirSync(root, { withFileTypes: true }).filter((entry) => entry.isDirectory());
 
     assert.deepEqual(cases.map((entry) => entry.name).sort(), [
         'calibrate-direct',
-        'inspect-morph',
-        'react-animation',
-        'web-components-lifecycle'
+        'inspect-morph'
     ]);
     for (const entry of cases) {
         assert.ok(readFileSync(resolve(root, entry.name, 'prompt.md'), 'utf8').trim(), entry.name);

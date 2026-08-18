@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
+import { mkdtempSync, rmSync, symlinkSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
 import test from 'node:test';
 
 import { inspectGlb } from '../plugins/engine/skills/inspect-glb/scripts/inspect.mjs';
@@ -263,11 +266,16 @@ test('rejects invalid container lengths and node graphs', () => {
     })), /invalid node graph/);
 });
 
-test('runs as a CLI and reports missing arguments', () => {
-    const result = spawnSync(process.execPath, ['plugins/engine/skills/inspect-glb/scripts/inspect.mjs'], {
-        encoding: 'utf8'
-    });
+test('runs as a CLI through direct and linked skill paths', (t) => {
+    const dir = mkdtempSync(join(tmpdir(), 'playcanvas-inspect-'));
+    t.after(() => rmSync(dir, { recursive: true, force: true }));
+    const root = resolve('plugins/engine/skills/inspect-glb');
+    const link = join(dir, 'inspect-glb');
+    symlinkSync(root, link, 'junction');
 
-    assert.equal(result.status, 1);
-    assert.match(result.stderr, /usage: node inspect\.mjs/);
+    for (const file of [join(root, 'scripts/inspect.mjs'), join(link, 'scripts/inspect.mjs')]) {
+        const result = spawnSync(process.execPath, [file], { encoding: 'utf8' });
+        assert.equal(result.status, 1, file);
+        assert.match(result.stderr, /usage: node inspect\.mjs/, file);
+    }
 });

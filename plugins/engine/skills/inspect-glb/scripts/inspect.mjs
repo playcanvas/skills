@@ -2,7 +2,6 @@
 // zero-dep glb metadata inspector. bounds come from decoded vertex positions, not accessor min/max,
 // so a rotated node reports its true extent and models can be placed touching.
 import fs from 'node:fs';
-import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const GLB_MAGIC = 0x46546c67;
@@ -351,7 +350,9 @@ export const inspectGlb = (buf) => {
     };
 };
 
-if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
+const main = import.meta.main ?? (process.argv[1] &&
+    fs.realpathSync(fileURLToPath(import.meta.url)) === fs.realpathSync(process.argv[1]));
+if (main) {
     const files = process.argv.slice(2);
     if (!files.length) {
         console.error('usage: node inspect.mjs <file.glb> [more.glb ...]');
