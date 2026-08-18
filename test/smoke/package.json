@@ -1,0 +1,20 @@
+{
+    "name": "playcanvas-skills-surface-smoke",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "check": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@playcanvas/react": "0.11.5",
+        "@playcanvas/web-components": "0.15.0",
+        "playcanvas": "2.21.4",
+        "react": "19.1.1",
+        "react-dom": "19.1.1",
+        "sync-ammo": "0.1.2"
+    },
+    "devDependencies": {
+        "@types/react": "19.1.10",
+        "typescript": "5.9.2"
+    }
+}

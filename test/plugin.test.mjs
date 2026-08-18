@@ -93,6 +93,19 @@ test('framework-aware skills treat every authoring surface equally', () => {
     }
 });
 
+test('calibration references preserve yaw and pivot compensation', () => {
+    const root = resolve('plugins/engine/skills/calibrate-model/references');
+    const refs = Object.fromEntries(surfaces.map((file) => [file, readFileSync(resolve(root, file), 'utf8')]));
+
+    for (const [file, src] of Object.entries(refs)) {
+        assert.match(src, /center(?:\[0\]|\.x).*scale/, file);
+        assert.match(src, /center(?:\[2\]|\.z).*scale/, file);
+    }
+    assert.match(refs['direct-engine.md'], /yaw\.addChild\(model\);\s+root\.addChild\(yaw\);/);
+    assert.match(refs['react.md'], /<Entity rotation=\{\[0, t\.yaw, 0\]\}>[\s\S]*<Entity[\s\S]*position=\{\[-t\.center\[0\]/);
+    assert.match(refs['web-components.md'], /<pc-entity rotation="0 180 0">\s+<pc-entity position="-0\.45 1\.2 0\.225"/);
+});
+
 test('plugin exposes the intended task-oriented skills', () => {
     assert.deepEqual(
         readdirSync('plugins/engine/skills', { withFileTypes: true })
@@ -137,5 +150,39 @@ test('README documents every shipped skill', () => {
 
     for (const skill of skills) {
         assert.ok(readme.includes(`[\`${skill}\`](plugins/engine/skills/${skill}/SKILL.md)`), skill);
+    }
+});
+
+test('evaluation cases cover every skill and authoring surface', () => {
+    const data = JSON.parse(readFileSync('evals/evals.json', 'utf8'));
+    const expected = [...data.triggerCases, ...data.behaviorCases].flatMap((entry) => entry.expected);
+
+    assert.equal(data.version, 1);
+    assert.deepEqual([...new Set(expected)].sort(), skills);
+    assert.deepEqual([...new Set(data.behaviorCases.map((entry) => entry.surface))].sort(), [
+        'direct-engine',
+        'react',
+        'web-components'
+    ]);
+    assert.ok(data.triggerCases.some((entry) => entry.expected.length === 0));
+    for (const entry of [...data.triggerCases, ...data.behaviorCases]) {
+        assert.ok(entry.id && (entry.prompt?.trim() || entry.scenario), entry.id);
+        assert.ok(entry.expected.every((skill) => skills.includes(skill)), entry.id);
+    }
+});
+
+test('forward evaluations have prompts and graders', () => {
+    const root = resolve('evals');
+    const cases = readdirSync(root, { withFileTypes: true }).filter((entry) => entry.isDirectory());
+
+    assert.deepEqual(cases.map((entry) => entry.name).sort(), [
+        'calibrate-direct',
+        'inspect-morph',
+        'react-animation',
+        'web-components-lifecycle'
+    ]);
+    for (const entry of cases) {
+        assert.ok(readFileSync(resolve(root, entry.name, 'prompt.md'), 'utf8').trim(), entry.name);
+        assert.ok(readFileSync(resolve(root, entry.name, 'graders/criteria.md'), 'utf8').trim(), entry.name);
     }
 });
