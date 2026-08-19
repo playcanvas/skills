@@ -43,6 +43,6 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit 1
 fi
 
-npm version "$TYPE" -m "chore: release v%s"
+npm version "$TYPE" -m "v%s"
 
 echo "Tagged v$NEXT. Push to publish: git push origin main && git push origin v$NEXT"
