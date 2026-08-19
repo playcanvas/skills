@@ -1,6 +1,7 @@
 # PlayCanvas Skills
 
 [![Version](https://img.shields.io/github/v/release/playcanvas/skills?label=version)](https://github.com/playcanvas/skills/releases/latest)
+[![skills.sh](https://skills.sh/b/playcanvas/skills)](https://skills.sh/playcanvas/skills)
 [![CI](https://github.com/playcanvas/skills/actions/workflows/ci.yml/badge.svg)](https://github.com/playcanvas/skills/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/playcanvas/skills)](LICENSE)
 [![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white&color=black)](https://discord.gg/RSaMRzg)
@@ -51,49 +52,64 @@ Turn this prototype into a polished PlayCanvas experience with deterministic rea
 paused, and reset states, a state-driven HUD, pooled effects, coherent lighting, and screenshot checks.
 ```
 
-## Install
+## Installation
 
-### Any Agent Skills-compatible harness
+Choose one route for each agent. Native plugins install the complete versioned bundle. The Agent
+Skills installer lets you select skills and writes editable copies into your project or user-level
+configuration. Installing both routes for the same agent exposes duplicate skills.
 
-List the available skills, then install them into all detected agents for the current project:
+### Native plugins
 
-```sh
-npx --yes skills add playcanvas/skills --list
-npx --yes skills add playcanvas/skills --all
-```
+<details>
+<summary><strong>Claude Code and Claude Code desktop</strong></summary>
 
-Use `-g` for a user-level installation. Start a new conversation after installing or updating so the
-agent discovers the new skill metadata.
-
-### Claude Code and Claude Code desktop
-
-```sh
+```bash
 claude plugin marketplace add playcanvas/skills
 claude plugin install engine@playcanvas
 ```
 
 In the desktop app's Code tab, installed plugins are available under **+ → Plugins**.
 
-### Codex CLI and app
+</details>
 
-```sh
+<details>
+<summary><strong>Codex CLI and app</strong></summary>
+
+```bash
 codex plugin marketplace add playcanvas/skills
 codex plugin add engine@playcanvas
 ```
 
 The Codex app uses the same marketplace and plugin installation.
 
-### Cursor
+</details>
+
+<details>
+<summary><strong>Cursor</strong></summary>
 
 For a single CLI session, load the plugin directly from a checkout:
 
-```sh
-cursor-agent --plugin-dir ./plugins/engine
+```bash
+cursor-agent --plugin-dir .
 ```
 
-For a persistent installation, add this repository as a plugin marketplace in Cursor or link
-`plugins/engine` into `~/.cursor/plugins/local/engine`. Teams and Enterprise organizations can
+For a persistent installation, add this repository as a plugin marketplace in Cursor or link the
+repository root into `~/.cursor/plugins/local/engine`. Teams and Enterprise organizations can
 publish the same marketplace to their organization.
+
+</details>
+
+### Agent Skills-compatible harnesses
+
+List the available skills, then install them into all detected agents for the current project:
+
+```bash
+npx skills@latest add playcanvas/skills --list
+npx skills@latest add playcanvas/skills --all
+```
+
+Use `-g` for a user-level installation. Start a new conversation after installing or updating so the
+agent discovers the new skill metadata.
 
 ## Supported surfaces
 
@@ -105,28 +121,28 @@ The skills resolve the active surface from imports and markup, then read only it
 | React | `playcanvas`, `@playcanvas/react` | React ownership, hooks, components, assets, Engine interop |
 | Web Components | `playcanvas`, `@playcanvas/web-components` | declarative elements, lifecycle, assets, Engine interop |
 
-Skills prefer the packages installed in the target project. A scheduled audit checks selected
-critical contracts against the latest npm releases.
+Skills prefer the packages installed in the target project. CI compiles representative usage against
+pinned supported package versions, and Renovate proposes dependency updates.
 
 ## Engine skills
 
 | Skill | Purpose |
 | --- | --- |
-| [`build-app`](plugins/engine/skills/build-app/SKILL.md) | Select and structure Direct Engine, React, or Web Components applications. |
-| [`apply-conventions`](plugins/engine/skills/apply-conventions/SKILL.md) | Apply stable coordinates, transforms, physics, materials, imports, and verification rules. |
-| [`find-examples`](plugins/engine/skills/find-examples/SKILL.md) | Find and adapt official examples matching the installed package version. |
-| [`reuse-scripts`](plugins/engine/skills/reuse-scripts/SKILL.md) | Discover and integrate production scripts shipped with the Engine. |
-| [`inspect-glb`](plugins/engine/skills/inspect-glb/SKILL.md) | Measure default-pose GLB bounds, transforms, clips, joints, morphs, and hierarchy offline. |
-| [`calibrate-model`](plugins/engine/skills/calibrate-model/SKILL.md) | Record stable scale, grounding, pivot compensation, and yaw for repeated models. |
-| [`configure-animation`](plugins/engine/skills/configure-animation/SKILL.md) | Configure clip playback, blending, state graphs, and retargeting from inspected data. |
-| [`assemble-scene`](plugins/engine/skills/assemble-scene/SKILL.md) | Compose semantic, visual, collider, physics, and effect hierarchies. |
-| [`light-scene`](plugins/engine/skills/light-scene/SKILL.md) | Build coherent lighting, exposure, shadows, reflections, water, and grading. |
-| [`add-effects`](plugins/engine/skills/add-effects/SKILL.md) | Add placed, pooled, and lifecycle-safe transient effects and trails. |
-| [`build-hud`](plugins/engine/skills/build-hud/SKILL.md) | Build accessible, state-driven overlays, menus, gauges, timers, and indicators. |
-| [`manage-game-state`](plugins/engine/skills/manage-game-state/SKILL.md) | Structure deterministic state, pointer lock, pause, reset, clocks, and cooldowns. |
+| [`build-app`](skills/build-app/SKILL.md) | Select and structure Direct Engine, React, or Web Components applications. |
+| [`apply-conventions`](skills/apply-conventions/SKILL.md) | Apply stable coordinates, transforms, physics, materials, imports, and verification rules. |
+| [`find-examples`](skills/find-examples/SKILL.md) | Find and adapt official examples matching the installed package version. |
+| [`reuse-scripts`](skills/reuse-scripts/SKILL.md) | Discover and integrate production scripts shipped with the Engine. |
+| [`inspect-glb`](skills/inspect-glb/SKILL.md) | Measure default-pose GLB bounds, transforms, clips, joints, morphs, and hierarchy offline. |
+| [`calibrate-model`](skills/calibrate-model/SKILL.md) | Record stable scale, grounding, pivot compensation, and yaw for repeated models. |
+| [`configure-animation`](skills/configure-animation/SKILL.md) | Configure clip playback, blending, state graphs, and retargeting from inspected data. |
+| [`assemble-scene`](skills/assemble-scene/SKILL.md) | Compose semantic, visual, collider, physics, and effect hierarchies. |
+| [`light-scene`](skills/light-scene/SKILL.md) | Build coherent lighting, exposure, shadows, reflections, water, and grading. |
+| [`add-effects`](skills/add-effects/SKILL.md) | Add placed, pooled, and lifecycle-safe transient effects and trails. |
+| [`build-hud`](skills/build-hud/SKILL.md) | Build accessible, state-driven overlays, menus, gauges, timers, and indicators. |
+| [`manage-game-state`](skills/manage-game-state/SKILL.md) | Structure deterministic state, pointer lock, pause, reset, clocks, and cooldowns. |
 
-Every integration loads the same canonical files from
-[`plugins/engine/skills/`](plugins/engine/skills/). Host manifests contain distribution metadata only.
+Every integration loads the same canonical files from [`skills/`](skills/). Host manifests contain
+distribution metadata only.
 
 The beta does not automate the PlayCanvas Editor, create or publish Editor projects, manage cloud
 services, or replace project-specific art direction and gameplay design. It provides Engine coding

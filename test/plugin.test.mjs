@@ -61,26 +61,39 @@ test('marketplace plugins match their manifests', () => {
         for (const entry of data.plugins) {
             const root = resolve(source(entry));
             const manifest = JSON.parse(readFileSync(resolve(root, file)));
-            const skills = resolve(root, manifest.skills ?? 'skills');
+            const paths = Array.isArray(manifest.skills) ? manifest.skills : [manifest.skills ?? 'skills'];
 
-            assert.equal(basename(root), entry.name, name);
             assert.equal(manifest.name, entry.name, name);
-            assert.ok(readdirSync(skills).some((file) => file !== '.DS_Store'), name);
+            for (const path of paths) {
+                const skills = resolve(root, path);
+                assert.ok(
+                    existsSync(resolve(skills, 'SKILL.md')) || readdirSync(skills).some((file) => file !== '.DS_Store'),
+                    `${name}: ${path}`
+                );
+            }
         }
     }
 });
 
 test('plugin versions match across hosts and versioned marketplaces', () => {
+    const pkg = JSON.parse(readFileSync('package.json'));
     const versions = maps.map(({ data, manifest, source }) =>
         JSON.parse(readFileSync(resolve(source(data.plugins[0]), manifest))).version);
 
-    assert.equal(new Set(versions).size, 1);
+    assert.equal(new Set([...versions, pkg.version]).size, 1);
     assert.equal(maps.find(({ name }) => name === 'claude').data.version, versions[0]);
     assert.equal(maps.find(({ name }) => name === 'cursor').data.metadata.version, versions[0]);
 });
 
+test('claude plugin ships the canonical skill inventory', () => {
+    const data = JSON.parse(readFileSync('.claude-plugin/plugin.json'));
+
+    assert.deepEqual(data.skills.map((file) => basename(file)).sort(), skills);
+    for (const file of data.skills) assert.ok(existsSync(resolve(file, 'SKILL.md')), file);
+});
+
 test('codex plugin and marketplace match ingestion contracts', () => {
-    const root = resolve('plugins/engine');
+    const root = resolve('.');
     const data = JSON.parse(readFileSync(resolve(root, '.codex-plugin/plugin.json')));
     const market = maps.find(({ name }) => name === 'codex').data;
 
@@ -115,7 +128,7 @@ test('codex plugin and marketplace match ingestion contracts', () => {
     assert.ok(typeof market.interface?.displayName === 'string' && market.interface.displayName.trim());
     for (const entry of market.plugins) {
         assert.equal(entry.source.source, 'local');
-        assert.equal(resolve(entry.source.path), resolve('plugins', entry.name));
+        assert.equal(resolve(entry.source.path), root);
         assert.ok(['AVAILABLE', 'INSTALLED_BY_DEFAULT', 'REQUIRED'].includes(entry.policy.installation));
         assert.ok(['ON_INSTALL', 'ON_FIRST_USE', 'NOT_REQUIRED'].includes(entry.policy.authentication));
         assert.ok(typeof entry.category === 'string' && entry.category.trim());
@@ -123,7 +136,7 @@ test('codex plugin and marketplace match ingestion contracts', () => {
 });
 
 test('canonical skills contain no host-specific instructions', () => {
-    const root = resolve('plugins/engine/skills');
+    const root = resolve('skills');
 
     for (const file of readdirSync(root, { recursive: true })) {
         if (file.endsWith('.md')) {
@@ -139,7 +152,7 @@ test('canonical skills contain no host-specific instructions', () => {
 test('framework-aware skills treat every authoring surface equally', () => {
     for (const skill of adapted) {
         assert.deepEqual(
-            readdirSync(resolve('plugins/engine/skills', skill, 'references')).sort(),
+            readdirSync(resolve('skills', skill, 'references')).sort(),
             surfaces,
             skill
         );
@@ -147,7 +160,7 @@ test('framework-aware skills treat every authoring surface equally', () => {
 });
 
 test('calibration references preserve yaw and pivot compensation', () => {
-    const root = resolve('plugins/engine/skills/calibrate-model/references');
+    const root = resolve('skills/calibrate-model/references');
     const refs = Object.fromEntries(surfaces.map((file) => [file, readFileSync(resolve(root, file), 'utf8')]));
 
     for (const [file, src] of Object.entries(refs)) {
@@ -161,7 +174,7 @@ test('calibration references preserve yaw and pivot compensation', () => {
 
 test('plugin exposes the intended task-oriented skills', () => {
     assert.deepEqual(
-        readdirSync('plugins/engine/skills', { withFileTypes: true })
+        readdirSync('skills', { withFileTypes: true })
             .filter((entry) => entry.isDirectory())
             .map((entry) => entry.name)
             .sort(),
@@ -171,7 +184,7 @@ test('plugin exposes the intended task-oriented skills', () => {
 
 test('skill metadata is portable and matches its folder', () => {
     for (const skill of skills) {
-        const file = resolve('plugins/engine/skills', skill, 'SKILL.md');
+        const file = resolve('skills', skill, 'SKILL.md');
         const frontmatter = readFileSync(file, 'utf8').match(/^---\n([\s\S]*?)\n---\n/)?.[1];
         assert.ok(frontmatter, skill);
         const data = Object.fromEntries(frontmatter.split('\n').map((line) => {
@@ -186,7 +199,7 @@ test('skill metadata is portable and matches its folder', () => {
 });
 
 test('local links in skill documentation resolve', () => {
-    const root = resolve('plugins/engine/skills');
+    const root = resolve('skills');
 
     for (const name of readdirSync(root, { recursive: true })) {
         if (!name.endsWith('.md')) continue;
@@ -202,6 +215,6 @@ test('README documents every shipped skill', () => {
     const readme = readFileSync('README.md', 'utf8');
 
     for (const skill of skills) {
-        assert.ok(readme.includes(`[\`${skill}\`](plugins/engine/skills/${skill}/SKILL.md)`), skill);
+        assert.ok(readme.includes(`[\`${skill}\`](skills/${skill}/SKILL.md)`), skill);
     }
 });

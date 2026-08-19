@@ -6,36 +6,34 @@ agreed before implementation.
 
 ## Skill changes
 
-- Keep canonical guidance agent-agnostic under `plugins/engine/skills/`.
+- Keep canonical guidance agent-agnostic under `skills/`.
 - Put surface-specific details in the existing Direct Engine, React, or Web Components reference.
 - Prefer installed package declarations, exports, shipped scripts, and official examples over copied
   snippets or assumed latest APIs.
 - Keep `SKILL.md` concise and imperative. Add scripts only for deterministic work that agents would
   otherwise reimplement.
 - Add the smallest repeatable proof for non-trivial behavior.
+- When adding or removing a skill, update its README entry and the explicit `skills` inventory in
+  `.claude-plugin/plugin.json`.
 
 ## Checks
 
-Run the repository suite and package audit:
+Install dependencies and run the repository suite:
 
 ```sh
-node --test test/*.test.mjs
-node scripts/audit-packages.mjs
-node scripts/smoke-surfaces.mjs
-node scripts/smoke-gltf-transform.mjs
+npm ci
+npm test
 ```
 
-The Node suite includes the Codex plugin and marketplace ingestion-contract validation. Codex does
-not expose a standalone plugin-validation command.
+This runs the skill tooling tests, validates every host manifest and marketplace, and compiles the
+Direct Engine, React, and Web Components examples against pinned packages.
 
-Validate every skill and run Claude's standalone marketplace validator before opening a pull
-request:
+Validate every skill against the Agent Skills specification before opening a pull request:
 
 ```sh
-for skill in plugins/engine/skills/*; do
+for skill in skills/*; do
     uvx --from skills-ref==0.1.1 agentskills validate "$skill"
 done
-claude plugin validate --strict .
 ```
 
 Pull requests should explain the user-visible failure or workflow being improved, identify the

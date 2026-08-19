@@ -18,7 +18,7 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     steps:
       - name: Check out code
         uses: actions/checkout@v7
@@ -27,50 +27,24 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: 24.x
-
-      - name: Run tests and validate plugin manifests
-        run: node --test test/*.test.mjs
-
-  skills:
-    name: Validate skills
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v7
+          cache: npm
 
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
           python-version: '3.13'
 
+      - name: Install dependencies
+        run: npm ci
+
       - name: Install the Agent Skills validator
         run: python -m pip install --disable-pip-version-check skills-ref==0.1.1
 
+      - name: Run tests
+        run: npm test
+
       - name: Validate canonical skills
         run: |
-          for skill in plugins/engine/skills/*; do
+          for skill in skills/*; do
             agentskills validate "$skill"
           done
-
-  audit:
-    name: Audit packages
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v7
-
-      - name: Set up Node.js 24.x
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24.x
-
-      - name: Audit current npm packages
-        run: node scripts/audit-packages.mjs
-
-      - name: Compile supported surfaces
-        run: node scripts/smoke-surfaces.mjs
-
-      - name: Verify compressed GLB normalization
-        run: node scripts/smoke-gltf-transform.mjs

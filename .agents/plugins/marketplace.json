@@ -8,7 +8,7 @@
             "name": "engine",
             "source": {
                 "source": "local",
-                "path": "./plugins/engine"
+                "path": "./"
             },
             "policy": {
                 "installation": "AVAILABLE",

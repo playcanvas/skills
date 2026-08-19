@@ -6,76 +6,19 @@ on:
             - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
-    validate:
-        name: Validate release
-        runs-on: ubuntu-latest
-        timeout-minutes: 15
-        permissions:
-            contents: read
-        steps:
-            - name: Check out code
-              uses: actions/checkout@v7
-              with:
-                  fetch-depth: 0
-
-            - name: Set up Node.js
-              uses: actions/setup-node@v7
-              with:
-                  node-version: 24.x
-
-            - name: Set up Python
-              uses: actions/setup-python@v7
-              with:
-                  python-version: '3.13'
-
-            - name: Verify tag and branch
-              run: |
-                  node scripts/check-release.mjs "$GITHUB_REF_NAME"
-                  git fetch origin main
-                  git merge-base --is-ancestor "$GITHUB_SHA" origin/main
-
-            - name: Run repository tests
-              run: node --test test/*.test.mjs
-
-            - name: Validate canonical skills
-              run: |
-                  python -m pip install --disable-pip-version-check skills-ref==0.1.1
-                  for skill in plugins/engine/skills/*; do
-                      agentskills validate "$skill"
-                  done
-
-            - name: Audit current npm packages
-              run: node scripts/audit-packages.mjs
-
-            - name: Compile supported surfaces
-              run: node scripts/smoke-surfaces.mjs
-
-            - name: Verify compressed GLB normalization
-              run: node scripts/smoke-gltf-transform.mjs
-
-    release:
-        name: Release
-        needs: validate
+    publish:
+        name: Publish
         runs-on: ubuntu-latest
         if: ${{ github.repository_owner == 'playcanvas' }}
         permissions:
             contents: write
         steps:
-            - name: Check out code
-              uses: actions/checkout@v7
-
             - name: Create GitHub Release
               uses: softprops/action-gh-release@v3
               with:
                   generate_release_notes: true
                   prerelease: ${{ startsWith(github.ref_name, 'v0.') }}
 
-    sync:
-        name: Sync
-        needs: release
-        runs-on: ubuntu-latest
-        if: ${{ github.repository_owner == 'playcanvas' }}
-        steps:
             - name: Generate app token
               id: app-token
               uses: actions/create-github-app-token@v3

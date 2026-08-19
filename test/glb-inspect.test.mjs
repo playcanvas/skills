@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import test from 'node:test';
 
-import { inspectGlb } from '../plugins/engine/skills/inspect-glb/scripts/inspect.mjs';
+import { inspectGlb } from '../skills/inspect-glb/scripts/inspect.mjs';
 
 const glb = (json, bin = Buffer.alloc(0)) => {
     const j = Buffer.from(JSON.stringify(json));
@@ -269,7 +269,7 @@ test('rejects invalid container lengths and node graphs', () => {
 test('runs as a CLI through direct and linked skill paths', (t) => {
     const dir = mkdtempSync(join(tmpdir(), 'playcanvas-inspect-'));
     t.after(() => rmSync(dir, { recursive: true, force: true }));
-    const root = resolve('plugins/engine/skills/inspect-glb');
+    const root = resolve('skills/inspect-glb');
     const link = join(dir, 'inspect-glb');
     symlinkSync(root, link, 'junction');
 

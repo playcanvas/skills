@@ -1,0 +1,44 @@
+{
+    "name": "@playcanvas/skills",
+    "version": "0.1.0",
+    "private": true,
+    "description": "Portable skills for building applications with PlayCanvas Engine",
+    "keywords": [
+        "playcanvas",
+        "skills",
+        "3d",
+        "webgl",
+        "webgpu",
+        "game-engine"
+    ],
+    "homepage": "https://github.com/playcanvas/skills#readme",
+    "bugs": {
+        "url": "https://github.com/playcanvas/skills/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/playcanvas/skills.git"
+    },
+    "license": "MIT",
+    "author": "PlayCanvas <support@playcanvas.com>",
+    "type": "module",
+    "scripts": {
+        "test": "node --test test/*.test.mjs && npm run test:types",
+        "test:types": "tsc -p test/smoke/tsconfig.json",
+        "version": "node scripts/sync-plugin-version.mjs && git add .claude-plugin/plugin.json .codex-plugin/plugin.json .cursor-plugin/plugin.json .claude-plugin/marketplace.json .cursor-plugin/marketplace.json"
+    },
+    "devDependencies": {
+        "@playcanvas/react": "0.11.5",
+        "@playcanvas/web-components": "0.16.0",
+        "@types/react": "19.1.10",
+        "playcanvas": "2.21.4",
+        "react": "19.1.1",
+        "react-dom": "19.1.1",
+        "sync-ammo": "0.1.2",
+        "typescript": "5.9.2"
+    },
+    "engines": {
+        "node": ">=22.18.0"
+    },
+    "packageManager": "npm@10.9.4"
+}

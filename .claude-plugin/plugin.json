@@ -1,0 +1,27 @@
+{
+    "name": "engine",
+    "version": "0.1.0",
+    "description": "Skills for building applications with PlayCanvas Engine",
+    "author": {
+        "name": "PlayCanvas",
+        "url": "https://playcanvas.com"
+    },
+    "homepage": "https://playcanvas.com",
+    "repository": "https://github.com/playcanvas/skills",
+    "license": "MIT",
+    "keywords": ["playcanvas", "3d", "webgl", "webgpu", "game-engine"],
+    "skills": [
+        "./skills/build-app",
+        "./skills/apply-conventions",
+        "./skills/find-examples",
+        "./skills/reuse-scripts",
+        "./skills/inspect-glb",
+        "./skills/calibrate-model",
+        "./skills/configure-animation",
+        "./skills/assemble-scene",
+        "./skills/light-scene",
+        "./skills/add-effects",
+        "./skills/build-hud",
+        "./skills/manage-game-state"
+    ]
+}
