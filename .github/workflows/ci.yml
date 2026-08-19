@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: 24.x
 
-      - name: Run tests
+      - name: Run tests and validate plugin manifests
         run: node --test test/*.test.mjs
 
   skills:

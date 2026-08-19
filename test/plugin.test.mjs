@@ -3,6 +3,16 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { basename, dirname, resolve } from 'node:path';
 import test from 'node:test';
 
+const semver = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
+const codexFields = new Set([
+    'id', 'name', 'version', 'description', 'skills', 'apps', 'mcpServers', 'interface',
+    'author', 'homepage', 'repository', 'license', 'keywords'
+]);
+const interfaceFields = new Set([
+    'displayName', 'shortDescription', 'longDescription', 'developerName', 'category',
+    'capabilities', 'websiteURL', 'privacyPolicyURL', 'termsOfServiceURL', 'brandColor',
+    'logo', 'icons', 'screenshots', 'defaultPrompt', 'default_prompt'
+]);
 const hosts = [
     {
         name: 'claude',
@@ -67,6 +77,49 @@ test('plugin versions match across hosts and versioned marketplaces', () => {
     assert.equal(new Set(versions).size, 1);
     assert.equal(maps.find(({ name }) => name === 'claude').data.version, versions[0]);
     assert.equal(maps.find(({ name }) => name === 'cursor').data.metadata.version, versions[0]);
+});
+
+test('codex plugin and marketplace match ingestion contracts', () => {
+    const root = resolve('plugins/engine');
+    const data = JSON.parse(readFileSync(resolve(root, '.codex-plugin/plugin.json')));
+    const market = maps.find(({ name }) => name === 'codex').data;
+
+    assert.deepEqual(Object.keys(data).filter((key) => !codexFields.has(key)), []);
+    assert.doesNotMatch(JSON.stringify(data), /\[TODO:/);
+    for (const key of ['name', 'version', 'description']) {
+        assert.ok(typeof data[key] === 'string' && data[key].trim(), key);
+    }
+    assert.match(data.name, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+    assert.match(data.version, semver);
+    if (data.author) {
+        assert.ok(typeof data.author.name === 'string' && data.author.name.trim());
+        assert.deepEqual(Object.keys(data.author).filter((key) => !['name', 'email', 'url'].includes(key)), []);
+        if (data.author.url) assert.match(data.author.url, /^https:\/\/[^/]+/);
+    }
+    if (data.homepage) assert.match(data.homepage, /^https:\/\/[^/]+/);
+    assert.equal(resolve(root, data.skills ?? 'skills'), resolve(root, 'skills'));
+    if (data.keywords) {
+        assert.ok(Array.isArray(data.keywords) && data.keywords.every((word) => typeof word === 'string' && word.trim()));
+    }
+
+    const ui = data.interface;
+    assert.ok(ui && typeof ui === 'object' && !Array.isArray(ui));
+    assert.deepEqual(Object.keys(ui).filter((key) => !interfaceFields.has(key)), []);
+    for (const key of ['displayName', 'shortDescription', 'longDescription', 'developerName', 'category']) {
+        assert.ok(typeof ui[key] === 'string' && ui[key].trim(), key);
+    }
+    assert.ok(Array.isArray(ui.capabilities) && ui.capabilities.every((item) => typeof item === 'string' && item.trim()));
+    assert.ok(typeof (ui.defaultPrompt ?? ui.default_prompt) === 'string' && (ui.defaultPrompt ?? ui.default_prompt).trim());
+
+    assert.ok(typeof market.name === 'string' && market.name.trim());
+    assert.ok(typeof market.interface?.displayName === 'string' && market.interface.displayName.trim());
+    for (const entry of market.plugins) {
+        assert.equal(entry.source.source, 'local');
+        assert.equal(resolve(entry.source.path), resolve('plugins', entry.name));
+        assert.ok(['AVAILABLE', 'INSTALLED_BY_DEFAULT', 'REQUIRED'].includes(entry.policy.installation));
+        assert.ok(['ON_INSTALL', 'ON_FIRST_USE', 'NOT_REQUIRED'].includes(entry.policy.authentication));
+        assert.ok(typeof entry.category === 'string' && entry.category.trim());
+    }
 });
 
 test('canonical skills contain no host-specific instructions', () => {
