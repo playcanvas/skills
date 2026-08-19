@@ -31,4 +31,4 @@ jobs:
             - name: Sync create-playcanvas skills
               env:
                   GH_TOKEN: ${{ steps.app-token.outputs.token }}
-              run: gh workflow run skills.yml --repo playcanvas/create-playcanvas
+              run: gh api --method POST repos/playcanvas/create-playcanvas/dispatches -f event_type=skills-release
