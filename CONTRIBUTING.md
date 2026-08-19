@@ -16,8 +16,7 @@ agreed before implementation.
 
 ## Checks
 
-Run the repository suite and package audit. The suite validates the Codex plugin and cross-host
-manifests:
+Run the repository suite and package audit:
 
 ```sh
 node --test test/*.test.mjs
@@ -26,7 +25,11 @@ node scripts/smoke-surfaces.mjs
 node scripts/smoke-gltf-transform.mjs
 ```
 
-Validate every skill and the Claude marketplace before opening a pull request:
+The Node suite includes the Codex plugin and marketplace ingestion-contract validation. Codex does
+not expose a standalone plugin-validation command.
+
+Validate every skill and run Claude's standalone marketplace validator before opening a pull
+request:
 
 ```sh
 for skill in plugins/engine/skills/*; do
