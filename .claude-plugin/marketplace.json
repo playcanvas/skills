@@ -10,9 +10,10 @@
     "plugins": [
         {
             "name": "engine",
-            "source": "./plugins/engine",
+            "source": "./",
             "description": "Skills for building applications with PlayCanvas Engine",
-            "category": "development"
+            "category": "development",
+            "keywords": ["playcanvas", "3d", "webgl", "webgpu", "game-engine"]
         }
     ]
 }

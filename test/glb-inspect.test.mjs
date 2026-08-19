@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
+import { mkdtempSync, rmSync, symlinkSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
 import test from 'node:test';
 
-import { inspectGlb } from '../plugins/engine/skills/inspect-glb/scripts/inspect.mjs';
+import { inspectGlb } from '../skills/inspect-glb/scripts/inspect.mjs';
 
 const glb = (json, bin = Buffer.alloc(0)) => {
     const j = Buffer.from(JSON.stringify(json));
@@ -80,14 +84,93 @@ test('applies node transforms to GLB bounds', () => {
     // no BIN chunk, so bounds fall back to the accessor box and must say so
     assert.equal(out.boundsSource, 'accessor-minmax');
     assert.deepEqual(out.boundsNotes, ['no-vertex-data']);
+    assert.equal(out.boundsPose, 'static');
+    assert.equal(out.requiresRuntimeCheck, true);
 });
 
 test('bounds come from vertex positions, not the accessor box', () => {
     const out = inspectGlb(octaGlb({ node: { rotation: yawQuat(45) } }));
 
     assert.equal(out.boundsSource, 'vertices');
+    assert.equal(out.requiresRuntimeCheck, false);
     // the rotated octahedron really is 0.7071 wide; its rotated local box would read 1.4142
     assert.deepEqual(out.dims, [0.7071, 1, 0.7071]);
+});
+
+test('decodes sparse positions', () => {
+    const bin = Buffer.alloc(28);
+    bin[0] = 0;
+    bin[1] = 2;
+    f32([-1, 0, 0, 2, 1, 0]).copy(bin, 4);
+    const out = inspectGlb(
+        glb(
+            {
+                asset: { version: '2.0' },
+                scene: 0,
+                scenes: [{ nodes: [0] }],
+                nodes: [{ mesh: 0 }],
+                meshes: [{ primitives: [{ attributes: { POSITION: 0 } }] }],
+                accessors: [{
+                    componentType: 5126,
+                    count: 3,
+                    type: 'VEC3',
+                    sparse: {
+                        count: 2,
+                        indices: { bufferView: 0, componentType: 5121 },
+                        values: { bufferView: 1 }
+                    }
+                }],
+                bufferViews: [
+                    { buffer: 0, byteOffset: 0, byteLength: 2 },
+                    { buffer: 0, byteOffset: 4, byteLength: 24 }
+                ],
+                buffers: [{ byteLength: 28 }]
+            },
+            bin
+        )
+    );
+
+    assert.equal(out.boundsSource, 'vertices');
+    assert.deepEqual(out.aabb, { min: [-1, 0, 0], max: [2, 1, 0] });
+});
+
+test('applies default morph weights and flags animated bounds', () => {
+    const out = inspectGlb(
+        glb(
+            {
+                asset: { version: '2.0' },
+                scene: 0,
+                scenes: [{ nodes: [0] }],
+                nodes: [{ mesh: 0, weights: [1] }],
+                meshes: [{
+                    weights: [0.5],
+                    primitives: [{ attributes: { POSITION: 0 }, targets: [{ POSITION: 1 }] }]
+                }],
+                accessors: [
+                    { bufferView: 0, componentType: 5126, count: 2, type: 'VEC3' },
+                    { bufferView: 1, componentType: 5126, count: 2, type: 'VEC3' },
+                    { componentType: 5126, count: 1, type: 'SCALAR', max: [1] }
+                ],
+                bufferViews: [
+                    { buffer: 0, byteOffset: 0, byteLength: 24 },
+                    { buffer: 0, byteOffset: 24, byteLength: 24 }
+                ],
+                buffers: [{ byteLength: 48 }],
+                animations: [{
+                    samplers: [{ input: 2, output: 2 }],
+                    channels: [{ sampler: 0, target: { node: 0, path: 'weights' } }]
+                }]
+            },
+            Buffer.concat([f32([0, 0, 0, 1, 0, 0]), f32([0, 0, 0, 1, 0, 0])])
+        )
+    );
+
+    assert.equal(out.boundsSource, 'vertices');
+    assert.equal(out.boundsPose, 'default-morph');
+    assert.equal(out.morphed, true);
+    assert.equal(out.morphAnimated, true);
+    assert.equal(out.requiresRuntimeCheck, true);
+    assert.deepEqual(out.dims, [2, 0, 0]);
 });
 
 test('decodes interleaved and quantized positions', () => {
@@ -150,9 +233,49 @@ test('reports why bounds are approximate when vertices cannot be decoded', () =>
     assert.deepEqual(out.dims, [1.4142, 1, 1.4142]);
 });
 
+test('does not report misleading meshopt accessor bounds', () => {
+    const out = inspectGlb(
+        octaGlb({ view: { extensions: { EXT_meshopt_compression: { buffer: 0, byteOffset: 0 } } } })
+    );
+
+    assert.equal(out.aabb, null);
+    assert.equal(out.boundsSource, null);
+    assert.equal(out.requiresRuntimeCheck, true);
+    assert.deepEqual(out.boundsNotes, ['meshopt-compressed']);
+});
+
 test('ignores the transform of a skinned mesh node', () => {
     const out = inspectGlb(octaGlb({ node: { skin: 0, scale: [10, 10, 10] }, skins: [{ joints: [1] }] }));
 
     assert.equal(out.skinned, true);
+    assert.equal(out.boundsPose, 'bind');
+    assert.equal(out.requiresRuntimeCheck, true);
     assert.deepEqual(out.dims, [1, 1, 1]);
+});
+
+test('rejects invalid container lengths and node graphs', () => {
+    const length = octaGlb();
+    length.writeUInt32LE(length.length + 4, 8);
+    assert.throws(() => inspectGlb(length), /invalid GLB length/);
+
+    assert.throws(() => inspectGlb(glb({
+        asset: { version: '2.0' },
+        scene: 0,
+        scenes: [{ nodes: [0] }],
+        nodes: [{ children: [1] }, { children: [0] }]
+    })), /invalid node graph/);
+});
+
+test('runs as a CLI through direct and linked skill paths', (t) => {
+    const dir = mkdtempSync(join(tmpdir(), 'playcanvas-inspect-'));
+    t.after(() => rmSync(dir, { recursive: true, force: true }));
+    const root = resolve('skills/inspect-glb');
+    const link = join(dir, 'inspect-glb');
+    symlinkSync(root, link, 'junction');
+
+    for (const file of [join(root, 'scripts/inspect.mjs'), join(link, 'scripts/inspect.mjs')]) {
+        const result = spawnSync(process.execPath, [file], { encoding: 'utf8' });
+        assert.equal(result.status, 1, file);
+        assert.match(result.stderr, /usage: node inspect\.mjs/, file);
+    }
 });

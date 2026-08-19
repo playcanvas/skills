@@ -9,19 +9,14 @@ fi
 
 git fetch --tags
 
-CURRENT=$(node -p "require('./plugins/engine/.claude-plugin/plugin.json').version")
-NEXT=$(node scripts/version.mjs "$TYPE" --dry-run)
+npm version "$TYPE" --no-git-tag-version > /dev/null
+NEXT=$(npm pkg get version | sed 's/"//g')
+git reset --hard > /dev/null
 
-read -p "Release v$NEXT (from v$CURRENT)? (y/N) " -r
+read -p "About to release 'v$NEXT'. Continue? (y/N) " -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     echo "Release cancelled."
     exit 1
 fi
 
-node scripts/version.mjs "$TYPE"    # bump every manifest in lockstep
-node --test test/*.test.mjs         # the "versions match across hosts" test is the sync backstop
-
-git commit -am "v$NEXT"
-git tag "v$NEXT"
-
-echo "Tagged v$NEXT. Push to publish: git push origin main && git push origin v$NEXT"
+npm version "$TYPE"
