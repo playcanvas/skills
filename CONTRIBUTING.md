@@ -12,8 +12,7 @@ agreed before implementation.
   snippets or assumed latest APIs.
 - Keep `SKILL.md` concise and imperative. Add scripts only for deterministic work that agents would
   otherwise reimplement.
-- Add the smallest repeatable proof for non-trivial behavior. Use a forward evaluation only when a
-  deterministic test cannot validate the agent behavior.
+- Add the smallest repeatable proof for non-trivial behavior.
 
 ## Checks
 
@@ -35,9 +34,6 @@ for skill in plugins/engine/skills/*; do
 done
 claude plugin validate --strict .
 ```
-
-Run `claude plugin eval . --ablation with-without --runs 1 --threshold 1` when a changed forward
-evaluation requires model-based verification; it may incur cost.
 
 Pull requests should explain the user-visible failure or workflow being improved, identify the
 package versions checked, and include numbered manual smoke-test steps with expected results when

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
+import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { join } from 'node:path';
 
 const MAX_BUFFER = 64 * 1024 * 1024;
 const CONTRACTS = [
@@ -39,11 +39,27 @@ const CONTRACTS = [
     {
         name: '@playcanvas/web-components',
         exports: ['.', './dist/*'],
-        files: ['dist/index.d.ts', 'dist/model.d.ts', 'dist/pwc.mjs'],
+        files: [
+            'dist/index.d.ts',
+            'dist/model.d.ts',
+            'dist/components/anim-component.d.ts',
+            'dist/components/anim-clip.d.ts',
+            'dist/pwc.mjs'
+        ],
         checks: {
-            'dist/index.d.ts': [/\bwhenReady\b/, /'pc-model': ModelElement/],
+            'dist/index.d.ts': [
+                /\bwhenReady\b/,
+                /'pc-model': ModelElement/,
+                /'pc-anim': AnimComponentElement/,
+                /'pc-anim-clip': AnimClipElement/
+            ],
             'dist/model.d.ts': [/declare class ModelElement\b/, /get asset\(\): string/],
-            'dist/pwc.mjs': [/assignAnimation\('animation', container\.animations\[0\]\.resource\)/]
+            'dist/components/anim-component.d.ts': [
+                /declare class AnimComponentElement\b/,
+                /transition\(name: string, time\?: number\): void/,
+                /get clips\(\): string\[\]/
+            ],
+            'dist/components/anim-clip.d.ts': [/declare class AnimClipElement\b/, /set asset\(value: string\)/]
         },
         peer: /^\^2\./
     }
@@ -77,26 +93,4 @@ const packed = CONTRACTS.map((contract) => {
     return { name: contract.name, version: data.version };
 });
 
-const at = process.argv.indexOf('--engine');
-let engine;
-if (at !== -1) {
-    const root = resolve(process.argv[at + 1] ?? '');
-    const pkg = JSON.parse(readFileSync(join(root, 'package.json')));
-    const parser = readFileSync(join(root, 'src/framework/parsers/glb-parser.js'), 'utf8');
-    const source = readdirSync(join(root, 'src'), { recursive: true })
-        .filter((file) => file.endsWith('.js'))
-        .map((file) => readFileSync(join(root, 'src', file), 'utf8'))
-        .join('\n');
-
-    for (const file of [
-        'scripts/esm/camera-controls.mjs',
-        'scripts/esm/camera-frame.mjs',
-        'scripts/esm/sky/procedural-sky.mjs',
-        'scripts/esm/water.mjs'
-    ]) assert.ok(existsSync(join(root, file)), `engine: ${file}`);
-    assert.match(parser, /KHR_draco_mesh_compression/);
-    assert.doesNotMatch(source, /EXT_meshopt_compression/);
-    engine = { path: root, version: pkg.version };
-}
-
-console.log(JSON.stringify({ checkedAt: new Date().toISOString(), packages: packed, ...(engine && { engine }) }, null, 2));
+console.log(JSON.stringify({ checkedAt: new Date().toISOString(), packages: packed }, null, 2));

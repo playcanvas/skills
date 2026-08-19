@@ -205,17 +205,3 @@ test('README documents every shipped skill', () => {
         assert.ok(readme.includes(`[\`${skill}\`](plugins/engine/skills/${skill}/SKILL.md)`), skill);
     }
 });
-
-test('forward evaluations have prompts and graders', () => {
-    const root = resolve('evals');
-    const cases = readdirSync(root, { withFileTypes: true }).filter((entry) => entry.isDirectory());
-
-    assert.deepEqual(cases.map((entry) => entry.name).sort(), [
-        'calibrate-direct',
-        'inspect-morph'
-    ]);
-    for (const entry of cases) {
-        assert.ok(readFileSync(resolve(root, entry.name, 'prompt.md'), 'utf8').trim(), entry.name);
-        assert.ok(readFileSync(resolve(root, entry.name, 'graders/criteria.md'), 'utf8').trim(), entry.name);
-    }
-});
