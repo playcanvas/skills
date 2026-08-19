@@ -1,7 +1,6 @@
 # PlayCanvas Skills
 
 [![Version](https://img.shields.io/github/v/release/playcanvas/skills?label=version)](https://github.com/playcanvas/skills/releases/latest)
-[![skills.sh](https://skills.sh/b/playcanvas/skills)](https://skills.sh/s/playcanvas/skills)
 [![CI](https://github.com/playcanvas/skills/actions/workflows/ci.yml/badge.svg)](https://github.com/playcanvas/skills/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/playcanvas/skills)](LICENSE)
 [![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white&color=black)](https://discord.gg/RSaMRzg)
@@ -10,8 +9,10 @@
 
 | [Skills.sh](https://skills.sh/s/playcanvas/skills) | [Developer Site](https://developer.playcanvas.com/) | [Engine Manual](https://developer.playcanvas.com/user-manual/engine/) | [API Reference](https://api.playcanvas.com/engine/) | [Examples](https://playcanvas.com/examples/) | [Forum](https://forum.playcanvas.com/) |
 
-Portable skills that help AI coding agents build and verify polished applications with PlayCanvas
-Engine, `@playcanvas/react`, and `@playcanvas/web-components`.
+Portable skills that help AI coding agents build and verify polished applications with
+[`playcanvas`](https://www.npmjs.com/package/playcanvas),
+[`@playcanvas/react`](https://www.npmjs.com/package/@playcanvas/react), and
+[`@playcanvas/web-components`](https://www.npmjs.com/package/@playcanvas/web-components).
 
 ## Install
 
