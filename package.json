@@ -1,6 +1,6 @@
 {
     "name": "@playcanvas/skills",
-    "version": "0.1.0",
+    "version": "0.0.0",
     "private": true,
     "description": "Portable skills for building applications with PlayCanvas Engine",
     "keywords": [
@@ -38,7 +38,7 @@
         "typescript": "5.9.2"
     },
     "engines": {
-        "node": ">=22.18.0"
+        "node": "24.x"
     },
     "packageManager": "npm@10.9.4"
 }

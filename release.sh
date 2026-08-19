@@ -7,11 +7,35 @@ if [[ ! " major minor patch " =~ " $TYPE " ]]; then
     exit 1
 fi
 
-git fetch --tags
+if [[ -n $(git status --porcelain) ]]; then
+    echo "Working tree must be clean."
+    exit 1
+fi
 
-npm version "$TYPE" --no-git-tag-version > /dev/null
-NEXT=$(npm pkg get version | sed 's/"//g')
-git reset --hard > /dev/null
+if [[ $(git branch --show-current) != "main" ]]; then
+    echo "Releases must be created from main."
+    exit 1
+fi
+
+git fetch origin main --tags
+
+if [[ $(git rev-parse HEAD) != $(git rev-parse origin/main) ]]; then
+    echo "Local main must match origin/main."
+    exit 1
+fi
+
+CURRENT=$(npm pkg get version | tr -d '"')
+IFS=. read -r MAJOR MINOR PATCH <<< "$CURRENT"
+case "$TYPE" in
+    major) NEXT="$((MAJOR + 1)).0.0" ;;
+    minor) NEXT="$MAJOR.$((MINOR + 1)).0" ;;
+    patch) NEXT="$MAJOR.$MINOR.$((PATCH + 1))" ;;
+esac
+
+if git rev-parse -q --verify "refs/tags/v$NEXT" > /dev/null; then
+    echo "Tag v$NEXT already exists."
+    exit 1
+fi
 
 read -p "About to release 'v$NEXT'. Continue? (y/N) " -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
@@ -19,4 +43,6 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit 1
 fi
 
-npm version "$TYPE"
+npm version "$TYPE" -m "chore: release v%s"
+
+echo "Tagged v$NEXT. Push to publish: git push origin main && git push origin v$NEXT"
