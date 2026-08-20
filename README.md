@@ -7,7 +7,7 @@
 [![Reddit](https://img.shields.io/badge/Reddit-FF4500?style=flat&logo=reddit&logoColor=white&color=black)](https://www.reddit.com/r/PlayCanvas)
 [![X](https://img.shields.io/badge/X-000000?style=flat&logo=x&logoColor=white&color=black)](https://x.com/playcanvas)
 
-| [Skills.sh](https://skills.sh/s/playcanvas/skills) | [Developer Site](https://developer.playcanvas.com/) | [Engine Manual](https://developer.playcanvas.com/user-manual/engine/) | [API Reference](https://api.playcanvas.com/engine/) | [Examples](https://playcanvas.com/examples/) | [Forum](https://forum.playcanvas.com/) |
+| [Skills.sh](https://skills.sh/playcanvas/skills) | [Developer Site](https://developer.playcanvas.com/) | [Engine Manual](https://developer.playcanvas.com/user-manual/engine/) | [API Reference](https://api.playcanvas.com/engine/) | [Examples](https://playcanvas.com/examples/) | [Forum](https://forum.playcanvas.com/) |
 
 Portable skills that help AI coding agents build and verify polished applications with
 [`playcanvas`](https://www.npmjs.com/package/playcanvas),
