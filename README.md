@@ -1,9 +1,9 @@
 # PlayCanvas Skills
 
+[![Skills.sh](https://skills.sh/b/playcanvas/skills)](https://skills.sh/playcanvas/skills)
 [![Version](https://img.shields.io/github/v/release/playcanvas/skills?include_prereleases&label=version)](https://github.com/playcanvas/skills/releases)
 [![CI](https://github.com/playcanvas/skills/actions/workflows/ci.yml/badge.svg)](https://github.com/playcanvas/skills/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/playcanvas/skills)](LICENSE)
-[![Skills.sh](https://skills.sh/b/playcanvas/skills)](https://skills.sh/playcanvas/skills)
 [![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white&color=black)](https://discord.gg/RSaMRzg)
 [![Reddit](https://img.shields.io/badge/Reddit-FF4500?style=flat&logo=reddit&logoColor=white&color=black)](https://www.reddit.com/r/PlayCanvas)
 [![X](https://img.shields.io/badge/X-000000?style=flat&logo=x&logoColor=white&color=black)](https://x.com/playcanvas)
