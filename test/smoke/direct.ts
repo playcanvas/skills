@@ -1,5 +1,6 @@
 import {
-    AppBase, AppOptions, BatchManager, CameraFrame, Entity, MeshInstance, MiniStats,
+    AppBase, AppOptions, BatchManager, CameraFrame, Color, Entity, MeshInstance, MiniStats,
+    SHADERLANGUAGE_GLSL, SHADERLANGUAGE_WGSL, ShaderMaterial, StandardMaterial,
     VertexBuffer, VertexFormat, WebglGraphicsDevice
 } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
@@ -41,3 +42,12 @@ const reduceDrawCalls = (app: AppBase, mi: MeshInstance) => {
     opts.batchManager = BatchManager;
 };
 void reduceDrawCalls;
+
+const overrideChunks = (mat: StandardMaterial) => {
+    mat.shaderChunksVersion = '2.8';
+    mat.getShaderChunks(SHADERLANGUAGE_GLSL).set('emissivePS', 'void getEmission() { dEmission = vec3(1.0); }');
+    void mat.getShaderChunks(SHADERLANGUAGE_WGSL);
+    mat.setParameter('accent', [...new Color(1, 0.5, 0).linear().toArray()]);
+    void ShaderMaterial;
+};
+void overrideChunks;

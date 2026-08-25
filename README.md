@@ -128,6 +128,7 @@ pinned supported package versions, and Renovate proposes dependency updates.
 | [`manage-game-state`](skills/manage-game-state/SKILL.md) | Structure deterministic state, pointer lock, pause, reset, clocks, and cooldowns. |
 | [`verify-pixels`](skills/verify-pixels/SKILL.md) | Prove a rendering change is pixel-identical or bounded before shipping. |
 | [`reduce-draw-calls`](skills/reduce-draw-calls/SKILL.md) | Measure and cut draw calls with element lifecycle, batching, and instancing. |
+| [`override-shader-chunks`](skills/override-shader-chunks/SKILL.md) | Customize StandardMaterial shading with version-pinned shader chunk overrides. |
 
 Every integration loads the same canonical files from [`skills/`](skills/). Host manifests contain
 distribution metadata only.
