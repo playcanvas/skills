@@ -25,6 +25,7 @@
         "./skills/manage-game-state",
         "./skills/verify-pixels",
         "./skills/reduce-draw-calls",
-        "./skills/override-shader-chunks"
+        "./skills/override-shader-chunks",
+        "./skills/bake-lighting"
     ]
 }

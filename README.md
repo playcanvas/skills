@@ -129,6 +129,7 @@ pinned supported package versions, and Renovate proposes dependency updates.
 | [`verify-pixels`](skills/verify-pixels/SKILL.md) | Prove a rendering change is pixel-identical or bounded before shipping. |
 | [`reduce-draw-calls`](skills/reduce-draw-calls/SKILL.md) | Measure and cut draw calls with element lifecycle, batching, and instancing. |
 | [`override-shader-chunks`](skills/override-shader-chunks/SKILL.md) | Customize StandardMaterial shading with version-pinned shader chunk overrides. |
+| [`bake-lighting`](skills/bake-lighting/SKILL.md) | Precompute static lighting with the engine Lightmapper or an offline bake. |
 
 Every integration loads the same canonical files from [`skills/`](skills/). Host manifests contain
 distribution metadata only.

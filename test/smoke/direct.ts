@@ -1,7 +1,7 @@
 import {
-    AppBase, AppOptions, BatchManager, CameraFrame, Color, Entity, MeshInstance, MiniStats,
-    SHADERLANGUAGE_GLSL, SHADERLANGUAGE_WGSL, ShaderMaterial, StandardMaterial,
-    VertexBuffer, VertexFormat, WebglGraphicsDevice
+    AppBase, AppOptions, BAKE_COLORDIR, BatchManager, CameraFrame, Color, Entity, Lightmapper,
+    MeshInstance, MiniStats, SHADERLANGUAGE_GLSL, SHADERLANGUAGE_WGSL, ShaderMaterial,
+    StandardMaterial, VertexBuffer, VertexFormat, WebglGraphicsDevice
 } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import { ProceduralSky } from 'playcanvas/scripts/esm/sky/procedural-sky.mjs';
@@ -51,3 +51,17 @@ const overrideChunks = (mat: StandardMaterial) => {
     void ShaderMaterial;
 };
 void overrideChunks;
+
+const bakeLighting = (app: AppBase, light: Entity, model: Entity) => {
+    const opts = new AppOptions();
+    opts.lightmapper = Lightmapper;
+    app.scene.ambientBake = true;
+    app.scene.ambientBakeNumSamples = 16;
+    if (light.light) light.light.bake = true;
+    if (model.render) {
+        model.render.lightmapped = true;
+        model.render.lightmapSizeMultiplier = 2;
+    }
+    app.lightmapper?.bake(null, BAKE_COLORDIR);
+};
+void bakeLighting;
