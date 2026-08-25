@@ -23,6 +23,7 @@
         "./skills/add-effects",
         "./skills/build-hud",
         "./skills/manage-game-state",
-        "./skills/verify-pixels"
+        "./skills/verify-pixels",
+        "./skills/reduce-draw-calls"
     ]
 }

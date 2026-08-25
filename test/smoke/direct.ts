@@ -1,4 +1,7 @@
-import { AppBase, CameraFrame, Entity, WebglGraphicsDevice } from 'playcanvas';
+import {
+    AppBase, AppOptions, BatchManager, CameraFrame, Entity, MeshInstance, MiniStats,
+    VertexBuffer, VertexFormat, WebglGraphicsDevice
+} from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import { ProceduralSky } from 'playcanvas/scripts/esm/sky/procedural-sky.mjs';
 import { Water } from 'playcanvas/scripts/esm/water.mjs';
@@ -26,3 +29,15 @@ const verifyPixels = async (app: AppBase) => {
     return px;
 };
 void verifyPixels;
+
+const reduceDrawCalls = (app: AppBase, mi: MeshInstance) => {
+    void app.stats.drawCalls;
+    void new MiniStats(app);
+    const format = VertexFormat.getDefaultInstancingFormat(app.graphicsDevice);
+    const vb = new VertexBuffer(app.graphicsDevice, format, 36, { data: new Float32Array(36 * 16).buffer });
+    mi.setInstancing(vb, true);
+    mi.instancingCount = 36;
+    const opts = new AppOptions();
+    opts.batchManager = BatchManager;
+};
+void reduceDrawCalls;

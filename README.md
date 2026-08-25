@@ -127,6 +127,7 @@ pinned supported package versions, and Renovate proposes dependency updates.
 | [`build-hud`](skills/build-hud/SKILL.md) | Build accessible, state-driven overlays, menus, gauges, timers, and indicators. |
 | [`manage-game-state`](skills/manage-game-state/SKILL.md) | Structure deterministic state, pointer lock, pause, reset, clocks, and cooldowns. |
 | [`verify-pixels`](skills/verify-pixels/SKILL.md) | Prove a rendering change is pixel-identical or bounded before shipping. |
+| [`reduce-draw-calls`](skills/reduce-draw-calls/SKILL.md) | Measure and cut draw calls with element lifecycle, batching, and instancing. |
 
 Every integration loads the same canonical files from [`skills/`](skills/). Host manifests contain
 distribution metadata only.
