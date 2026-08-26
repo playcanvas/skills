@@ -45,7 +45,8 @@ const adapted = [
     'reuse-scripts'
 ];
 const skills = [...adapted, 'apply-conventions', 'inspect-glb',
-    'add-effects', 'build-hud', 'light-scene', 'manage-game-state'].sort();
+    'add-effects', 'build-hud', 'light-scene', 'manage-game-state', 'verify-pixels',
+    'reduce-draw-calls', 'override-shader-chunks', 'bake-lighting'].sort();
 
 test('marketplaces expose the same plugins', () => {
     const names = maps[0].data.plugins.map((entry) => entry.name);

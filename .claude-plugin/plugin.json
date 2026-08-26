@@ -22,6 +22,10 @@
         "./skills/light-scene",
         "./skills/add-effects",
         "./skills/build-hud",
-        "./skills/manage-game-state"
+        "./skills/manage-game-state",
+        "./skills/verify-pixels",
+        "./skills/reduce-draw-calls",
+        "./skills/override-shader-chunks",
+        "./skills/bake-lighting"
     ]
 }
