@@ -29,9 +29,9 @@
     },
     "devDependencies": {
         "@playcanvas/react": "0.11.5",
-        "@playcanvas/web-components": "0.17.0",
+        "@playcanvas/web-components": "0.22.0",
         "@types/react": "19.1.10",
-        "playcanvas": "2.21.4",
+        "playcanvas": "2.22.0",
         "react": "19.1.1",
         "react-dom": "19.1.1",
         "sync-ammo": "0.1.2",
