@@ -45,10 +45,10 @@ Treat the selected script source and its closest official example as complementa
 If no matching example exists, state that and derive the integration from installed source instead
 of inventing it from memory.
 
-For an outdoor water scene, start from `graphics/water.example.mjs` as one integration recipe. It
-combines `Water`, `ProceduralSky`, `CameraControls`, `CameraFrame`, a dedicated water layer, scene
-depth, normal and caustics textures, and conservative rendering defaults. Establish that complete
-baseline before adapting its camera, assets, time of day, or water tuning.
+For an approved reflective, photoreal outdoor water scene, start from `graphics/water.example.mjs`.
+It combines `Water`, `ProceduralSky`, `CameraControls`, `CameraFrame`, a dedicated water layer, scene
+depth, normal and caustics textures, and conservative rendering defaults. Resolve an unclear art
+direction with `light-scene` before integration; then establish the baseline before customizing it.
 
 ## Preserve grouped defaults
 

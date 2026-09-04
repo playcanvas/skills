@@ -15,11 +15,11 @@ Read `app.stats.drawCalls.total` (or the `forward`/`depth`/`shadow` breakdown) b
 anything, or drop in `MiniStats` for a live overlay. Every rung below is proved against this number,
 not against intuition about what "looks expensive."
 
-If the total is already small — a few dozen to a few hundred draws — and the frame still misses
-its budget, submission is not the bottleneck and no rung below will move frame time. Confirm by
-halving `graphicsDevice.maxPixelRatio` and calling `app.resizeCanvas()`: frame time that falls with
-pixel count is fill-rate bound, and the levers are resolution, multisampling and per-pixel shader
-cost, not draw calls.
+Draw count alone does not identify the bottleneck. Test sensitivity to pixel cost by halving the
+effective pixel ratio (`Math.min(graphicsDevice.maxPixelRatio, window.devicePixelRatio)`) and calling
+`app.resizeCanvas()`. Verify the backbuffer shrank and compare frame times at the same scene state.
+If frame time improves materially, prioritize resolution, multisampling and per-pixel shader cost.
+Otherwise profile CPU and GPU work before choosing a rung; restore the original ratio after the test.
 
 ## Rung 1: stop drawing invisible things
 

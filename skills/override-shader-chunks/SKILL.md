@@ -22,8 +22,8 @@ version's documentation.
 ## Clone before overriding a shared material
 
 Clone a material that other mesh instances share — including default and asset-imported materials —
-before overriding its chunks or setting per-instance parameters, and assign the clone. Overriding
-the shared instance restyles every mesh that uses it.
+before changing its chunks, properties, or material-level parameters for only some meshes, and assign
+the clone. For per-mesh uniforms, use `meshInstance.setParameter()` without cloning the material.
 
 ## Set chunks through the documented accessor
 

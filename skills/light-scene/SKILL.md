@@ -9,6 +9,13 @@ A polished frame is lit and graded, not just populated. Treat lighting, sky, sha
 and post as one pass over the assembled scene, and tune every value against a real screenshot rather
 than from memory.
 
+## Confirm art direction before implementation
+
+Follow the user's specified or approved direction. When it is unresolved, present concrete options
+using references, mockups, or inexpensive rendered variants and get approval before substantial
+implementation. Prefer a side-by-side variant sheet when cheap to produce. Work within the approved
+direction and confirm significant departures before implementing them.
+
 ## Choose the path from the brief
 
 Read the reference before wiring any pipeline. A photoreal or cinematic brief takes the runtime HDR
@@ -16,11 +23,9 @@ path below. A brief whose reference is low-poly, flat-shaded, toon, or palette-d
 startup, frame, or payload budget rules out the runtime pipeline — takes the stylized path: banded
 or flat shading through `override-shader-chunks`, a solid or gradient sky, static lighting through
 `bake-lighting`, and no `Water` or `CameraFrame`. A remark such as "look at the water script" is a
-pointer, not a mandate to integrate it; when the brief names a stylized reference, ask one question
-before wiring `Water` or `CameraFrame`, because undoing that integration costs more than the
-question. On either path, dynamic objects and their attachments must sample or approximate the
-baked or ambient occlusion so they dim to the same levels as the surfaces around them, grounded with
-contact shadows.
+pointer to inspect it; confirm any resulting change of art direction before integration. On either
+path, dynamic objects and their attachments must sample or approximate the baked or ambient occlusion
+so they dim to the same levels as the surfaces around them, grounded with contact shadows.
 
 ## Runtime HDR path
 
@@ -38,15 +43,15 @@ water layer, scene depth, and reflection pipeline. Get that complete frame rende
 replacing its assets or tuning its look; a custom normal-mapped material or tessellated plane is not
 that baseline.
 
-Keep the two named production integrations visible in the implementation:
+For that water scene, keep both production integrations visible in the implementation:
 
 - import and create `Water` from `playcanvas/scripts/esm/water.mjs` on the water entity, preserving
   the example's required render component, camera reference, water layer, depth map, and textures;
 - construct `CameraFrame` from `playcanvas` for the gameplay camera, set a deliberate tone map and
   restrained grade, call `update()`, and destroy it with the application.
 
-Do not continue to cosmetic tuning while either integration is missing or diagnostics report a
-shader, texture, or framebuffer error.
+Do not continue to cosmetic tuning while a required integration is missing or diagnostics report
+a shader, texture, or framebuffer error.
 
 ## Light and expose
 
@@ -87,15 +92,10 @@ shader, texture, or framebuffer error.
   screenshot. Reject the grade if either broad highlight clipping or crushed-black silhouette hides
   texture detail. A mechanically valid frame is not visually complete while either failure remains.
 
-## Decide looks side by side
-
-For any look decision — palette, sky, water style, foam, occlusion strength — render three or four
-variants at the same pose into one image and let the user pick. Do not iterate one variant at a
-time: a single-variant loop takes several rounds to converge where one sheet takes one. Before
-claiming a visual change, show old and new at the same pose in one image; if the difference is not
-visible there, say so and stop tuning instead of adjusting further.
-
 ## Prove the look
+
+For changes to an existing look, show old and new at the same pose in one image. If the difference
+is not visible, report that before spending more time tuning.
 
 Tune against pixels, not numbers. Capture the intended framing with an image-returning browser
 screenshot tool and inspect the returned image, as `apply-conventions` and the local agent guide
