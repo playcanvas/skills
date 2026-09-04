@@ -19,6 +19,12 @@ it reads or writes — are version-keyed and change between releases. Read the i
 source for the exact chunk being touched; do not recall its contract from memory or an older
 version's documentation.
 
+## Clone before overriding a shared material
+
+Clone a material that other mesh instances share — including default and asset-imported materials —
+before changing its chunks, properties, or material-level parameters for only some meshes, and assign
+the clone. For per-mesh uniforms, use `meshInstance.setParameter()` without cloning the material.
+
 ## Set chunks through the documented accessor
 
 Use `material.getShaderChunks(SHADERLANGUAGE_GLSL).set(name, source)`, and the WGSL equivalent —
