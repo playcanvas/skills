@@ -13,7 +13,7 @@ override is the default for everything else, since it is cheaper and stays integ
 
 ## Pin the version, read the source
 
-Set `material.shaderChunksVersion` to the installed engine's major.minor (for example `'2.21'`)
+Set `material.shaderChunksVersion` to the installed engine's major.minor (for example `'2.22'`)
 before shipping any override. Chunk names and their contracts — what a chunk defines, what globals
 it reads or writes — are version-keyed and change between releases. Read the installed `playcanvas`
 source for the exact chunk being touched; do not recall its contract from memory or an older

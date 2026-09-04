@@ -44,7 +44,7 @@ const reduceDrawCalls = (app: AppBase, mi: MeshInstance) => {
 void reduceDrawCalls;
 
 const overrideChunks = (mat: StandardMaterial) => {
-    mat.shaderChunksVersion = '2.21';
+    mat.shaderChunksVersion = '2.22';
     mat.getShaderChunks(SHADERLANGUAGE_GLSL).set('emissivePS', 'void getEmission() { dEmission = vec3(1.0); }');
     void mat.getShaderChunks(SHADERLANGUAGE_WGSL);
     mat.setParameter('accent', [...new Color(1, 0.5, 0).linear().toArray()]);
