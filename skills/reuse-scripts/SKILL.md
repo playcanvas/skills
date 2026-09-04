@@ -19,7 +19,9 @@ is a `Script`; the parsers below `scripts/esm/parsers` are plain classes registe
 handler instead.
 
 Only import from `scripts/esm/**`. Legacy sibling directories depend on the global Engine namespace.
-After selecting a script, use `find-examples` to locate its matching versioned Engine example.
+After selecting a script, use `find-examples` to locate its matching versioned Engine example. When
+`node_modules/playcanvas` is a linked or source checkout, its `examples/src/examples/**` are already
+on disk; read them there and skip the fetch.
 
 Use a relevant shipped script as the default implementation. If it cannot own the whole feature,
 preserve its input signs, angular damping, bounds, and lifecycle invariants in the custom portion

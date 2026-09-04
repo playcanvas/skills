@@ -15,6 +15,12 @@ Read `app.stats.drawCalls.total` (or the `forward`/`depth`/`shadow` breakdown) b
 anything, or drop in `MiniStats` for a live overlay. Every rung below is proved against this number,
 not against intuition about what "looks expensive."
 
+If the total is already small — a few dozen to a few hundred draws — and the frame still misses
+its budget, submission is not the bottleneck and no rung below will move frame time. Confirm by
+halving `graphicsDevice.maxPixelRatio` and calling `app.resizeCanvas()`: frame time that falls with
+pixel count is fill-rate bound, and the levers are resolution, multisampling and per-pixel shader
+cost, not draw calls.
+
 ## Rung 1: stop drawing invisible things
 
 An element at opacity 0 still submits a draw call — its mesh instance exists and is still in a

@@ -63,5 +63,22 @@ const bakeLighting = (app: AppBase, light: Entity, model: Entity) => {
         model.render.lightmapSizeMultiplier = 2;
     }
     app.lightmapper?.bake(null, BAKE_COLORDIR);
+    if (model.render) {
+        for (const mi of model.render.meshInstances) void mi.mesh.vertexBuffer.format.hasUv1;
+    }
 };
 void bakeLighting;
+
+const renderDensity = (app: AppBase) => {
+    app.graphicsDevice.maxPixelRatio = Math.min(window.devicePixelRatio, 2);
+    app.resizeCanvas();
+};
+void renderDensity;
+
+const addEffects = (burst: Entity, mi: MeshInstance) => {
+    burst.particlesystem?.reset();
+    burst.particlesystem?.play();
+    burst.particlesystem?.stop();
+    mi.setParameter('pulse', 0.5);
+};
+void addEffects;
