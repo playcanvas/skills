@@ -1,6 +1,6 @@
 ---
 name: build-app
-description: Use when creating or restructuring a PlayCanvas app with the Engine API, @playcanvas/react, or @playcanvas/web-components: bootstrap, input, resize, physics, game loop, HUD, lifecycle.
+description: Use when creating or restructuring a PlayCanvas app with the Engine API, @playcanvas/react, or @playcanvas/web-components, covering bootstrap, input, resize, physics, game loop, HUD, and lifecycle.
 ---
 
 # Build an Engine application

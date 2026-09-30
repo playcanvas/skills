@@ -1,6 +1,6 @@
 ---
 name: find-examples
-description: Use when implementing an unfamiliar PlayCanvas feature such as animation, particles, shaders, physics, UI, splats, or XR, to adapt the official example matching the installed version.
+description: Use when implementing an unfamiliar PlayCanvas feature such as animation, particles, shaders, physics, UI, splats, or XR, to adapt the version-matched official example.
 ---
 
 # Official examples

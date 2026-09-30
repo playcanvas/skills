@@ -1,6 +1,6 @@
 ---
 name: light-scene
-description: Use when lighting or rendering a PlayCanvas scene: key and ambient light, sky and environment lighting, shadows, tone mapping, exposure, fog, water, and post-processing.
+description: Use when lighting or rendering a PlayCanvas scene, covering key and ambient light, sky and environment lighting, shadows, tone mapping, exposure, fog, water, and post-processing.
 ---
 
 # Light and render a scene
