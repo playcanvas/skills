@@ -5,16 +5,17 @@ description: Use when writing PlayCanvas Engine code touching transforms, camera
 
 # Engine conventions
 
-Check version-sensitive APIs against the installed `playcanvas` declarations.
+Check version-sensitive APIs against installed `playcanvas` declarations.
 
 ## Coordinates
 
-- Right-handed, +Y up, metres. `entity.forward` and cameras look down -Z; `lookAt` aims -Z.
+- Right-handed, +Y up, metres. `entity.forward`, cameras, and `lookAt` use -Z.
 - Directional and spot lights shine along local -Y, straight down by default. Aim them with
   `setEulerAngles`, not `lookAt`.
-- glTF models usually face +Z; record a yaw per model with `calibrate-model`.
-- Keep pitch, yaw, and roll as app state; never feed `getEulerAngles()` back into
-  `setEulerAngles()`. Interpolate with `math.lerpAngle` or `Quat.slerp`.
+- glTF models usually face +Z; record per-model yaw with `calibrate-model`.
+- Angle APIs take degrees in XYZ order. Keep pitch, yaw, and roll as app state; never feed
+  `getEulerAngles()` back into `setEulerAngles()`. Interpolate with `math.lerpAngle` or
+  `Quat.slerp`.
 - Use world setters on semantic roots and `setLocal*` below a parent. Never scale rigid-body roots
   or skinned bones.
 
@@ -28,20 +29,21 @@ Check version-sensitive APIs against the installed `playcanvas` declarations.
 ## Cameras
 
 - FOV is vertical, 45° by default. Prefer the shipped `CameraControls` (`reuse-scripts`).
-- Smooth an orbit camera's focus, yaw, pitch, and distance, then derive its position.
+- Smooth an orbit camera's focus, angles, and distance, then derive position.
 
 ## Materials and bounds
 
 - `StandardMaterial.useMetalness` defaults to `false`; enable it before using `metalness`.
 - Call `material.update()` after property edits. Per-mesh values use `meshInstance.setParameter()`
   with no update or clone.
-- Clone a shared material, including imported ones, before editing it for only some meshes.
+- Clone shared materials, including imported ones, before editing them for some meshes.
 - `setParameter` uploads raw values; convert sRGB colours with `Color#linear()`.
-- Entities have no `aabb`; union descendant `meshInstance.aabb`. Expand mesh bounds by any
-  vertex-shader displacement.
+- Back faces cull by default; counter-clockwise winding is the front face.
+- Entities have no `aabb`; union descendant `meshInstance.aabb`. If `mesh.update()` skips bounds,
+  set `mesh.aabb` yourself, and expand it by any vertex-shader displacement.
 
 ## Verify in the running app
 
-Offline values cannot prove facing, animated poses, or placement. Log values from inside the app,
-from a `Script` or update callback, and judge visuals only from screenshots you have inspected. A
-saved file path is not evidence. Other skills rely on this rule.
+Offline values cannot prove facing, poses, or placement. Log values from a `Script` or update
+callback in the running app, and judge visuals only from screenshots you have inspected. A saved
+file path is not evidence.

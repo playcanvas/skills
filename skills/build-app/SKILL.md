@@ -15,7 +15,8 @@ reference: [direct Engine](references/direct-engine.md), [React](references/reac
   unless passed to `new Application(canvas, { ... })`; UI buttons need `new ElementInput(canvas)`.
 - The Engine adds no window resize listener; call `app.resizeCanvas()` from your own handler.
 - `graphicsDevice.maxPixelRatio` defaults to 1. Raise it, at most to `window.devicePixelRatio`, only
-  where the target holds its frame budget, then call `app.resizeCanvas()`.
+  where the target holds its frame budget, call `app.resizeCanvas()`, and confirm with
+  `canvas.width / canvas.clientWidth`.
 - Rigid bodies stay inert until Ammo loads through `WasmModule`. Copy the loader from the
   `physics/falling-shapes` example with `find-examples`.
 

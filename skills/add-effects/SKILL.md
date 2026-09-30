@@ -23,7 +23,8 @@ example from `find-examples`. Reserve a custom mesh for continuous ribbons such 
 ## Trail meshes
 
 - Match vertex streams to the material. A lit `StandardMaterial` needs `SEMANTIC_NORMAL` data before
-  the first `mesh.update()`; otherwise use an unlit material.
+  the first `mesh.update()`; otherwise use an unlit material. A missing vertex-attribute warning is
+  a render failure.
 - Never attach an empty dynamic mesh to an enabled render component. Upload valid seed geometry
   first and never `mesh.clear()` while it renders; reflection cameras expose this first.
 - Append segments on small time or distance steps and fade the tail; coarse chunks stutter.

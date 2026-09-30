@@ -32,6 +32,9 @@ Core exports that are not scripts include `CameraFrame` for post-processing, `Pi
    say what was missing.
 4. After a rendered frame, fail on console, shader, or missing-asset errors.
 
+For camera input, keep the shipped controller's gesture mapping and damping. Verify both axes with
+real input rather than deriving signs from memory.
+
 Grouped property updates differ by surface; preserve defaults you do not change. Read only the
 reference matching the code: [direct Engine](references/direct-engine.md),
 [React](references/react.md), or [Web Components](references/web-components.md).
