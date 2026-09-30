@@ -44,8 +44,8 @@ const adapted = [
     'find-examples',
     'reuse-scripts'
 ];
-const skills = [...adapted, 'apply-conventions', 'inspect-glb',
-    'add-effects', 'build-hud', 'light-scene', 'manage-game-state', 'verify-pixels',
+const skills = [...adapted, 'apply-conventions', 'inspect-glb', 'load-assets',
+    'add-effects', 'light-scene', 'verify-pixels',
     'reduce-draw-calls', 'override-shader-chunks', 'bake-lighting'].sort();
 
 test('marketplaces expose the same plugins', () => {

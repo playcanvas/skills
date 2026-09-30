@@ -22,6 +22,10 @@ contract because the native Codex plugin validates direct skill children.
 - Prefer installed package declarations, exports, shipped scripts, and official examples over copied
   snippets or assumed APIs.
 - Add deterministic scripts only when agents would otherwise need to reimplement the same work.
+- Keep skills short: descriptions ≤ 25 words, `SKILL.md` bodies ≤ 300 words. State engine facts and
+  gotchas, not process or taste; cross-reference a rule instead of restating it.
+- Keep skills task-agnostic. Describe Engine capabilities, defaults, and gotchas that help with any
+  task; do not describe specific use cases, genres, or example scenes.
 - When adding or removing a skill, update the top-level README and the Claude plugin's explicit
   `skills` inventory.
 

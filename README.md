@@ -78,7 +78,7 @@ publish the same marketplace to their organization.
   API.
 - Inspect GLB geometry, transforms, clips, joints, morphs, and hierarchy before choosing placement or
   animation values.
-- Keep scene ownership, model calibration, physics, effects, UI, and game state predictable.
+- Keep scene ownership, model calibration, physics, effects, UI, and app state predictable.
 - Reuse Engine features such as `CameraControls`, `Water`, `ProceduralSky`, and `CameraFrame` with
   their required integrations intact.
 - Finish with runtime and screenshot evidence instead of treating a successful build as visual proof.
@@ -94,8 +94,8 @@ shipped camera controls, and verify grounding and framing in the browser.
 ```
 
 ```text
-Polish this @playcanvas/react prototype with deterministic game states, a state-driven HUD, pooled
-effects, coherent lighting, and screenshot checks.
+Polish this @playcanvas/react prototype with compressed assets, reused Engine scripts, pooled
+effects, deliberate lighting and tone mapping, and screenshot checks.
 ```
 
 ## Supported surfaces
@@ -120,13 +120,12 @@ pinned supported package versions, and Renovate proposes dependency updates.
 | [`find-examples`](skills/find-examples/SKILL.md) | Find and adapt official examples matching the installed package version. |
 | [`reuse-scripts`](skills/reuse-scripts/SKILL.md) | Discover and integrate production scripts shipped with the Engine. |
 | [`inspect-glb`](skills/inspect-glb/SKILL.md) | Measure default-pose GLB bounds, transforms, clips, joints, morphs, and hierarchy offline. |
+| [`load-assets`](skills/load-assets/SKILL.md) | Load glTF containers, set up Draco and Basis decoders, and choose compression. |
 | [`calibrate-model`](skills/calibrate-model/SKILL.md) | Record stable scale, grounding, pivot compensation, and yaw for repeated models. |
 | [`configure-animation`](skills/configure-animation/SKILL.md) | Configure clip playback, blending, state graphs, and retargeting from inspected data. |
 | [`assemble-scene`](skills/assemble-scene/SKILL.md) | Compose semantic, visual, collider, physics, and effect hierarchies. |
-| [`light-scene`](skills/light-scene/SKILL.md) | Build coherent lighting, exposure, shadows, reflections, water, and grading. |
-| [`add-effects`](skills/add-effects/SKILL.md) | Add placed, pooled, and lifecycle-safe transient effects and trails. |
-| [`build-hud`](skills/build-hud/SKILL.md) | Build accessible, state-driven overlays, menus, gauges, timers, and indicators. |
-| [`manage-game-state`](skills/manage-game-state/SKILL.md) | Structure deterministic state, pointer lock, pause, reset, clocks, and cooldowns. |
+| [`light-scene`](skills/light-scene/SKILL.md) | Set lighting, environment, shadows, tone mapping, exposure, and post-processing. |
+| [`add-effects`](skills/add-effects/SKILL.md) | Choose particles, custom shaders, geometry, or screen effects for transient visuals. |
 | [`verify-pixels`](skills/verify-pixels/SKILL.md) | Prove a rendering change is pixel-identical or bounded before shipping. |
 | [`reduce-draw-calls`](skills/reduce-draw-calls/SKILL.md) | Measure and cut draw calls with element lifecycle, batching, and instancing. |
 | [`override-shader-chunks`](skills/override-shader-chunks/SKILL.md) | Customize StandardMaterial shading with version-pinned shader chunk overrides. |
