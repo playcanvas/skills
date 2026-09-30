@@ -22,14 +22,16 @@ shadow-map rendering and per-pixel dynamic lighting for that light entirely.
   pass for normal- or specular-mapped materials that need one.
 - Baked ambient occlusion, independent of any light: `scene.ambientBake` plus
   `ambientBakeNumSamples`, `ambientBakeOcclusionBrightness`/`OcclusionContrast`.
-- Run `app.lightmapper.bake(null, mode)` once the scene exists; `null` bakes every lightmapped node.
+- The engine bakes every lightmapped node once, on the first rendered frame, using
+  `scene.lightmapMode`; set the mode there. Call `app.lightmapper.bake(null, mode)` only for nodes
+  added after that frame or to re-bake, or the scene bakes twice.
 
 ## Verify UVs before trusting this on real assets
 
 The installed `Lightmapper` bakes a node only when every mesh instance on it has a second UV set
-(`mesh.vertexBuffer.format.hasUv1`). A node missing one is skipped silently — no warning, no
-lightmap — and its mesh simply stays dynamically lit, which a glance at a screenshot will not catch.
-Procedural primitives generate that set; imported GLB models often do not. Check `hasUv1` on every
+(`SEMANTIC_TEXCOORD1` in its vertex format). A node missing one is skipped — no lightmap, only a
+debug-build log — and its mesh stays dynamically lit, which a screenshot glance will not catch.
+Procedural primitives generate that set; imported GLB models often do not. Check it on every
 mesh you expect to bake, and unwrap or re-export the ones without it before the bake. Do not carry a
 primitive-only test result into production assets unchecked.
 

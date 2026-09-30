@@ -33,8 +33,9 @@ the actual scene lighting and surface.
 ## Pool and prewarm
 
 - Create emitters, ribbons, flashes, materials, and meshes at load. Events check out an effect, set
-  its transform, and call `particlesystem.reset()` then `play()`; after its particles finish, call
-  `stop()` and return it to the pool.
+  its transform, and call `particlesystem.reset()` then `play()`. Give one-shot emitters `loop:
+  false` and return them to the pool once their particles finish; `stop()` only ends emission early
+  and lets live particles finish.
 - First-use shader compilation can stall a frame. Before gameplay, render every material and particle
   variant through the relevant passes, on an offscreen rig or behind the ready overlay.
 - Pulse or tint uniforms with `meshInstance.setParameter` or `material.setParameter`.
