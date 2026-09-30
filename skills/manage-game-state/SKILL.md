@@ -23,8 +23,8 @@ booleans.
   ready or paused to playing and leave playing unchanged; only transition playing to paused when the
   element is no longer the canvas. Never implement it as a toggle. Browsers and automation can both
   report an already-acquired lock, and a duplicate enter event must not pause the game.
-- Clamp the per-frame delta before integrating anything, as `build-app` requires, so a backgrounded
-  tab or a slow frame cannot inject one large step into movement, cooldowns, or the clock.
+- Advance movement, cooldowns, and the clock from the Engine's `dt`, already clamped by
+  `app.maxDeltaTime`, so a backgrounded tab or a slow frame cannot inject one large step.
 
 ## Reset
 

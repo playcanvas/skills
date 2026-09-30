@@ -32,8 +32,8 @@ animation time between builds. Seed incidental randomness so only the intended c
 
 - Drive every animated shader or vertex effect from one app-owned time value, never `Date.now()` or
   `performance.now()` read inside the render path, so a captured phase is exactly reproducible.
-- Freeze the clock with `app.timeScale = 0` before capturing; nothing should advance between frames
-  you did not explicitly step.
+- Freeze the clock with `app.timeScale = 0` before capturing. `update(dt)` still runs with
+  `dt = 0`, so anything driven by frame counts or wall-clock time still advances; drive it by `dt`.
 - Step frames explicitly: set `app.autoRender = false` once, then set `app.renderNextFrame = true`
   before each frame you want rendered. The engine renders exactly that frame and clears the flag —
   do not rely on the free-running render loop plus a timed screenshot.
@@ -41,9 +41,10 @@ animation time between builds. Seed incidental randomness so only the intended c
 ## Gate and report the byte-exact class
 
 Read the exact backbuffer with `await device.readPixelsAsync(x, y, w, h, pixels)`. In the installed
-engine this method lives on `WebglGraphicsDevice`, so narrow to it; WebGPU needs an equivalent
-readback. An existing capture path must preserve raw pixels without colour conversion or lossy
-encoding before comparison.
+engine this method lives on `WebglGraphicsDevice`, so narrow to it. On WebGPU, render into a
+`RenderTarget` and read its `colorBuffer` with `Texture#read()`, which works on both backends. An
+existing capture path must preserve raw pixels without colour conversion or lossy encoding before
+comparison.
 
 Before trusting any diff between the old and new build, capture the same pose × phase matrix twice
 from the *unmodified* build. Two captures of identical, frozen state must be bit-identical. If they

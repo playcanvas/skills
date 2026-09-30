@@ -38,6 +38,6 @@ For every surface:
 - prefer the surface's declarative or lifecycle primitives before reaching into the Engine;
 - put per-entity and per-frame behavior in an Engine `Script` when page or view state is not its
   natural owner;
-- clamp the per-frame delta before advancing gameplay, timers, physics, or a state clock, so a
-  backgrounded tab or a slow frame cannot inject one large integration step;
+- rely on the Engine's per-frame delta clamp, `app.maxDeltaTime` (default 0.1 s), instead of
+  hand-clamping; tune it when gameplay needs a smaller step;
 - clean up external events and resources in the lifecycle that created them.

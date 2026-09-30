@@ -11,9 +11,9 @@ costs more engineering time than the draw calls it saves.
 
 ## Measure first
 
-Read `app.stats.drawCalls.total` (or the `forward`/`depth`/`shadow` breakdown) before changing
-anything, or drop in `MiniStats` for a live overlay. Every rung below is proved against this number,
-not against intuition about what "looks expensive."
+Read `app.stats.drawCalls.total` before changing anything, or drop in `MiniStats` for a live
+overlay. The `forward`/`shadow` breakdown fills only in profiler builds; `depth` is always 0. Every
+rung below is proved against this number, not against intuition about what "looks expensive."
 
 Draw count alone does not identify the bottleneck. Test sensitivity to pixel cost by halving the
 effective pixel ratio (`Math.min(graphicsDevice.maxPixelRatio, window.devicePixelRatio)`) and calling
@@ -33,27 +33,24 @@ when you're profiling — this rung is easy to skip precisely because nothing lo
 `app.batcher.addGroup(name, dynamic, maxAabbSize)`, then set `batchGroupId` on each member's
 component (render, sprite, or UI element). Use `dynamic: false` for geometry that never moves.
 
-Contract: the `batchGroupId` setter only inserts into the batcher while `entity.enabled` is true,
-and that flag requires both the local enable state and hierarchy attachment — set `batchGroupId`
-after the entity is parented into the live tree, not before, or the member silently drops out of the
-group. `BatchManager.generate()` runs once automatically on the app's first rendered frame; if group
-membership changes afterward, call `app.batcher.markGroupDirty(id)` (or `generate([id])`) yourself.
-An Engine-only app without the full `Application` bootstrap must register the class via
-`AppOptions.batchManager` before it can batch anything.
+Contract: a member joins its group whenever its component is enabled in the live tree, so the order
+of parenting and setting `batchGroupId` does not matter. Adding or removing members marks the group
+dirty and it regenerates on the next frame; call `app.batcher.markGroupDirty(id)` only after moving
+members of a static group. An Engine-only app without the full `Application` bootstrap must register
+the class via `AppOptions.batchManager` before it can batch anything.
 
 ## Rung 3: hardware instancing — merge without touching layout
 
 Reach for this once distinct materials or per-frame transform updates would defeat `BatchManager`.
 Build a per-instance vertex buffer with `VertexFormat.getDefaultInstancingFormat(device)` (one mat4
-per instance), call `meshInstance.setInstancing(vb)`, and set `instancingCount`. A custom vertex
-chunk needs its own `INSTANCING` code path with an identity-matrix fallback for the non-instanced
-case (cross-reference `override-shader-chunks`).
+per instance) and call `meshInstance.setInstancing(vb)`; it sets `instancingCount` from the buffer.
+A custom vertex chunk needs its own `INSTANCING` code path with a `matrix_model` fallback for the
+non-instanced case (cross-reference `override-shader-chunks`).
 
-Culling trade-off: instanced meshes cull as one unit against a single bounding volume — an
-off-screen instance inside an otherwise-visible group still draws unless you opt in. Pass
-`setInstancing(vb, true)` and set a `RenderComponent#customAabb` spanning every instance's world
-extent so the renderer has something correct to cull against instead of culling nothing or
-culling the whole group by one instance's bounds.
+Culling trade-off: there is no per-instance culling. By default the group always draws; pass
+`setInstancing(vb, true)` to cull the whole group as one unit, and set a
+`RenderComponent#customAabb` spanning every instance's world extent so it is not culled by one
+mesh's bounds. Split large fields into spatial chunks when off-screen instances cost too much.
 
 Adapt the official recipes rather than deriving the buffer layout or vertex-shader wiring from
 memory: `graphics/instancing-basic` for the format/buffer contract, `graphics/instancing-custom` for

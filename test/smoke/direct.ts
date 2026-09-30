@@ -1,7 +1,7 @@
 import {
     AppBase, AppOptions, BAKE_COLORDIR, BatchManager, CameraFrame, Color, Entity, Lightmapper,
-    MeshInstance, MiniStats, SHADERLANGUAGE_GLSL, SHADERLANGUAGE_WGSL, ShaderMaterial,
-    StandardMaterial, VertexBuffer, VertexFormat, WebglGraphicsDevice
+    MeshInstance, MiniStats, SEMANTIC_TEXCOORD1, SHADERLANGUAGE_GLSL, SHADERLANGUAGE_WGSL,
+    ShaderMaterial, StandardMaterial, VertexBuffer, VertexFormat, WebglGraphicsDevice
 } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import { ProceduralSky } from 'playcanvas/scripts/esm/sky/procedural-sky.mjs';
@@ -37,7 +37,6 @@ const reduceDrawCalls = (app: AppBase, mi: MeshInstance) => {
     const format = VertexFormat.getDefaultInstancingFormat(app.graphicsDevice);
     const vb = new VertexBuffer(app.graphicsDevice, format, 36, { data: new Float32Array(36 * 16).buffer });
     mi.setInstancing(vb, true);
-    mi.instancingCount = 36;
     const opts = new AppOptions();
     opts.batchManager = BatchManager;
 };
@@ -62,9 +61,12 @@ const bakeLighting = (app: AppBase, light: Entity, model: Entity) => {
         model.render.lightmapped = true;
         model.render.lightmapSizeMultiplier = 2;
     }
+    app.scene.lightmapMode = BAKE_COLORDIR;
     app.lightmapper?.bake(null, BAKE_COLORDIR);
     if (model.render) {
-        for (const mi of model.render.meshInstances) void mi.mesh.vertexBuffer.format.hasUv1;
+        for (const mi of model.render.meshInstances) {
+            void mi.mesh.vertexBuffer.format.elements.some(e => e.name === SEMANTIC_TEXCOORD1);
+        }
     }
 };
 void bakeLighting;
@@ -72,6 +74,7 @@ void bakeLighting;
 const renderDensity = (app: AppBase) => {
     app.graphicsDevice.maxPixelRatio = Math.min(window.devicePixelRatio, 2);
     app.resizeCanvas();
+    app.maxDeltaTime = 0.05;
 };
 void renderDensity;
 
