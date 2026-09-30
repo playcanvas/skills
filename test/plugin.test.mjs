@@ -44,7 +44,7 @@ const adapted = [
     'find-examples',
     'reuse-scripts'
 ];
-const skills = [...adapted, 'apply-conventions', 'inspect-glb',
+const skills = [...adapted, 'apply-conventions', 'inspect-glb', 'load-assets',
     'add-effects', 'build-hud', 'light-scene', 'manage-game-state', 'verify-pixels',
     'reduce-draw-calls', 'override-shader-chunks', 'bake-lighting'].sort();
 

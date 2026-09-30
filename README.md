@@ -120,6 +120,7 @@ pinned supported package versions, and Renovate proposes dependency updates.
 | [`find-examples`](skills/find-examples/SKILL.md) | Find and adapt official examples matching the installed package version. |
 | [`reuse-scripts`](skills/reuse-scripts/SKILL.md) | Discover and integrate production scripts shipped with the Engine. |
 | [`inspect-glb`](skills/inspect-glb/SKILL.md) | Measure default-pose GLB bounds, transforms, clips, joints, morphs, and hierarchy offline. |
+| [`load-assets`](skills/load-assets/SKILL.md) | Load glTF containers, set up Draco and Basis decoders, and choose compression. |
 | [`calibrate-model`](skills/calibrate-model/SKILL.md) | Record stable scale, grounding, pivot compensation, and yaw for repeated models. |
 | [`configure-animation`](skills/configure-animation/SKILL.md) | Configure clip playback, blending, state graphs, and retargeting from inspected data. |
 | [`assemble-scene`](skills/assemble-scene/SKILL.md) | Compose semantic, visual, collider, physics, and effect hierarchies. |

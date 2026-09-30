@@ -16,6 +16,7 @@
         "./skills/find-examples",
         "./skills/reuse-scripts",
         "./skills/inspect-glb",
+        "./skills/load-assets",
         "./skills/calibrate-model",
         "./skills/configure-animation",
         "./skills/assemble-scene",
