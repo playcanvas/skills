@@ -1,17 +1,17 @@
 ---
 name: verify-pixels
-description: Use when a PlayCanvas rendering change must not alter the image, such as batching, instancing, or shader, material, or asset refactors, to prove pixel equality.
+description: Use when a PlayCanvas rendering change is meant to leave the image unchanged, to prove it with deterministic captures and pixel comparison.
 ---
 
 # Prove pixels unchanged
 
 ## Choose the gate
 
-- Byte-exact: batching, instancing, index or chunk changes, and format swaps with identical decoded
-  data.
-- Side-by-side review: changes to sampled values, such as re-rolled noise, RNG order, CPU-to-GPU
-  moves, precision, or fewer samples. Report these as "not byte-gateable" and show old and new at
-  each pose; do not invent thresholds.
+- Byte-exact: the change keeps the same decoded data and the same shading math, so every pixel
+  must match.
+- Side-by-side review: the change alters sampled values, random order, precision, or where math
+  runs. Report it as "not byte-gateable" and show old and new at each pose; do not invent
+  thresholds.
 
 ## Make frames deterministic
 

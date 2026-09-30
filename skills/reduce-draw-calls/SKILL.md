@@ -1,6 +1,6 @@
 ---
 name: reduce-draw-calls
-description: Use when a PlayCanvas app has too many draw calls or is CPU-bound from repeated meshes, dense grids, or always-on UI, before hand-merging meshes.
+description: Use when a PlayCanvas app has too many draw calls or is CPU-bound, before hand-merging meshes or writing custom renderers.
 ---
 
 # Cut draw calls
@@ -30,7 +30,7 @@ Use this for many copies of one mesh and material with per-frame transforms. Bui
 
 There is no per-instance culling. By default the group always draws; `setInstancing(vb, true)`
 culls it as one unit against a `RenderComponent#customAabb` covering every instance. Split large
-fields into spatial chunks. Custom vertex chunks need the `INSTANCING` path
+instance sets into spatial chunks. Custom vertex chunks need the `INSTANCING` path
 (`override-shader-chunks`). Start from the `graphics/instancing-basic` and
 `graphics/instancing-custom` examples.
 

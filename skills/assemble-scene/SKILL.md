@@ -1,15 +1,15 @@
 ---
 name: assemble-scene
-description: Use when composing PlayCanvas gameplay objects from models, colliders, and rigid bodies so each has one semantic root with calibrated visuals and clear lifecycle.
+description: Use when composing PlayCanvas entity hierarchies from models, colliders, rigid bodies, and scripts, so each object has one semantic root and clear lifecycle.
 ---
 
 # Scene assembly
 
-One gameplay object has one named root. Put position, heading, `rigidbody`, `collision`, and
+Each scene object has one named root. Put position, heading, `rigidbody`, `collision`, and
 scripts on the root, and the calibrated visual from `calibrate-model` below it. Apply calibration
 once; if the tuning record is missing, calibrate first.
 
-- Name roots by gameplay role, with predictable names for repeated instances.
+- Name roots by role, with predictable names for repeated instances.
 - Size colliders from measured bounds and keep them aligned with render bounds.
 - Space roots by the scaled footprint in the tuning record, not by pivot position. A non-90° yaw
   rotates the footprint, so reserve its larger horizontal extent.

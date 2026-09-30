@@ -1,6 +1,6 @@
 ---
 name: build-app
-description: Use when creating or restructuring a PlayCanvas app with the Engine API, @playcanvas/react, or @playcanvas/web-components, covering bootstrap, input, resize, physics, game loop, HUD, and lifecycle.
+description: Use when creating or restructuring a PlayCanvas app with the Engine API, @playcanvas/react, or @playcanvas/web-components, covering bootstrap, input, resize, physics, update loop, UI, and lifecycle.
 ---
 
 # Build an Engine application
@@ -20,21 +20,19 @@ reference: [direct Engine](references/direct-engine.md), [React](references/reac
 - Rigid bodies stay inert until Ammo loads through `WasmModule`. Copy the loader from the
   `physics/falling-shapes` example with `find-examples`.
 
-## Game loop
+## Update loop
 
 - `dt` is already clamped by `app.maxDeltaTime` (0.1 s); tune it instead of clamping by hand.
-  `app.timeScale = 0` pauses scaled time.
-- Model control flow as an explicit state machine, such as ready, playing, paused, and over.
-  Advance simulation only while playing, and reset through the same setup as the first start.
-- Request pointer lock from a user gesture. Pause on lock loss or blur, and handle a repeated
-  `pointerlockchange` without toggling.
+  `app.timeScale` scales it, and `0` pauses scaled time.
+- Keep app state explicit and owned in one place; advance time-dependent logic from `dt`, and reset
+  through the same setup used at start.
 
-## HUD
+## UI
 
-- Render UI from game state; never store gameplay truth in the DOM or UI elements.
+- Render UI from app state; never keep the source of truth in the DOM or UI elements.
 - Use a DOM or React overlay, or Engine `screen` and `element` components adapted from a
   `user-interface` example.
-- Hide idle elements with `enabled = false`; an element at opacity 0 still draws.
+- Hide unused elements with `enabled = false`; an element at opacity 0 still draws.
 
 ## Ownership
 

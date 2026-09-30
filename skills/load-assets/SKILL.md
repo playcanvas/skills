@@ -18,8 +18,8 @@ and `EXT_mesh_gpu_instancing`; do not rebuild these by hand. Preload asset sets 
 - Geometry: Draco (`KHR_draco_mesh_compression`). Meshopt is not supported, so decode such files
   before shipping.
 - Textures: KTX2 with Basis (`KHR_texture_basisu`) transcodes to a GPU format, cutting both
-  download size and VRAM. ETC1S is smallest and lossy, suiting colour and UI textures. UASTC is
-  larger and keeps detail, suiting normal maps and hero textures. Weigh size against visible detail.
+  download size and VRAM. ETC1S is smallest and lossy. UASTC is larger and keeps
+  detail, which matters most for normal maps. Weigh size against visible detail.
 
 ## Set up decoders
 
@@ -47,6 +47,6 @@ config with `glue`, `wasm`, and `fallback` attributes.
 
 ## Other assets
 
-- Raise `texture.anisotropy`, which defaults to 1, for ground seen at grazing angles.
+- Raise `texture.anisotropy`, which defaults to 1, for surfaces viewed at grazing angles.
 - Gaussian splats load as `gsplat` assets onto a `gsplat` component; start from a
   `gaussian-splatting` example.

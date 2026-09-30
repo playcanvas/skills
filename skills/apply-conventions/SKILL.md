@@ -28,8 +28,8 @@ Check version-sensitive APIs against installed `playcanvas` declarations.
 
 ## Cameras
 
-- FOV is vertical, 45° by default. Prefer the shipped `CameraControls` (`reuse-scripts`).
-- Smooth an orbit camera's focus, angles, and distance, then derive position.
+- FOV is vertical, 45° by default. Check shipped camera scripts before writing controls
+  (`reuse-scripts`).
 
 ## Materials and bounds
 

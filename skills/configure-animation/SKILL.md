@@ -15,8 +15,7 @@ Get clip and joint names from `inspect-glb`; never guess them.
 - Retarget only when each source `animationTargets` path, minus its `.translation`, `.rotation`,
   `.scale`, or `.weights` suffix, matches a destination `nodePaths` entry below the model root.
   Equal joint counts or similar names are not enough.
-- Scale a wrapper, never skinned bones. Match playback rate to movement speed when foot sliding
-  matters.
+- Scale a wrapper, never skinned bones.
 
 ## Prove playback
 

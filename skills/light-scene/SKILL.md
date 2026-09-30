@@ -1,6 +1,6 @@
 ---
 name: light-scene
-description: Use when lighting or rendering a PlayCanvas scene, covering key and ambient light, sky and environment lighting, shadows, tone mapping, exposure, fog, water, and post-processing.
+description: Use when lighting or rendering a PlayCanvas scene, covering lights, ambient and environment lighting, sky, shadows, tone mapping, exposure, fog, and post-processing.
 ---
 
 # Light and render a scene
@@ -28,8 +28,6 @@ screenshots, one class of value at a time.
 - The `ProceduralSky` script owns a linked sun light: set the light's base intensity, then tune
   elevation and azimuth on the sky, not the light.
 - The `ShadowCatcher` script grounds subjects that have no lit floor.
-- For water, start from `graphics/water.example.mjs`; the `Water` script needs its layer, depth map,
-  and camera reference.
 - Clustered lighting is on by default, so many point and spot lights are cheap.
 - Bake static lights with `bake-lighting`; stylize shading with `override-shader-chunks`.
 

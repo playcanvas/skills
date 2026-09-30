@@ -9,7 +9,7 @@ Resolve `scripts/inspect.mjs` relative to this skill and run it before choosing 
 animation names. Shortlist files; do not dump a whole asset pack into context.
 
 ```sh
-node <skill-directory>/scripts/inspect.mjs public/models/{Ship,Enemy}_*.glb
+node <skill-directory>/scripts/inspect.mjs public/models/*.glb
 ```
 
 ## Read the output
