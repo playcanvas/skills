@@ -28,10 +28,10 @@
         "version": "node scripts/sync-plugin-version.mjs && git add .claude-plugin/plugin.json .codex-plugin/plugin.json .cursor-plugin/plugin.json .claude-plugin/marketplace.json .cursor-plugin/marketplace.json"
     },
     "devDependencies": {
-        "@playcanvas/react": "0.11.5",
-        "@playcanvas/web-components": "0.22.0",
+        "@playcanvas/react": "0.11.7",
+        "@playcanvas/web-components": "0.26.0",
         "@types/react": "19.1.10",
-        "playcanvas": "2.22.0",
+        "playcanvas": "2.22.6",
         "react": "19.1.1",
         "react-dom": "19.1.1",
         "sync-ammo": "0.1.2",
