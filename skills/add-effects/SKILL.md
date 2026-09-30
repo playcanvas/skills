@@ -1,39 +1,33 @@
 ---
 name: add-effects
-description: Use when adding particles, trails, flashes, or camera shake to a PlayCanvas app, to use Engine particle systems, pool emitters, and avoid shader stalls.
+description: Use when adding particles, trails, flashes, decals, or other transient visual effects to a PlayCanvas app, to pick the right Engine building block.
 ---
 
 # Effects
 
-Use the `particlesystem` component for smoke, sparks, and spray, adapting the closest particle
-example from `find-examples`. Reserve a custom mesh for continuous ribbons such as wakes or trails.
+Pick the Engine building block first, then adapt its closest official example with
+`find-examples`:
 
-## Particles
+- Particles such as smoke, sparks, snow, or bursts: the `particlesystem` component. See the
+  `graphics/particles-*` examples.
+- Custom looks such as glows, dissolves, or animated surfaces: override `StandardMaterial` chunks
+  with `override-shader-chunks`. Use a `ShaderMaterial` only when the effect needs its own shader
+  pair.
+- Custom geometry such as trails, ribbons, or beams: a runtime-updated `Mesh` on a `render`
+  component (see `graphics/mesh-generation` and `graphics/mesh-deformation`), or `WideLineRenderer`
+  for thick lines.
+- Decals: see `graphics/mesh-decals`.
+- Screen effects such as bloom, vignette, or DOF: `CameraFrame` (`light-scene`).
+- Splat effects: the shipped gsplat scripts (`reuse-scripts`).
 
-- `CurveSet` takes one key array per channel: `new CurveSet([0, x0, 1, x1], [0, y0, 1, y1],
-  [0, z0, 1, z1])`. A flattened array type-checks, then fails at texture upload.
-- Create emitters at load and pool them. To fire one, set its transform, then call `reset()` and
-  `play()`. One-shots use `loop: false`; `stop()` only ends emission early.
-- The first use of a shader stalls a frame. Render every material and particle variant once behind
-  a loading or ready screen; `graphicsDevice.shaders.length` growing after the first real event
-  means a variant was missed.
-- Animate values with `meshInstance.setParameter` or `material.setParameter`. `material.update()`
-  rebuilds variants, so avoid it per frame.
+## Engine gotchas
 
-## Trail meshes
-
-- Match vertex streams to the material. A lit `StandardMaterial` needs `SEMANTIC_NORMAL` data before
-  the first `mesh.update()`; otherwise use an unlit material. A missing vertex-attribute warning is
-  a render failure.
-- Never attach an empty dynamic mesh to an enabled render component. Upload valid seed geometry
-  first and never `mesh.clear()` while it renders; reflection cameras expose this first.
-- Append segments on small time or distance steps and fade the tail; coarse chunks stutter.
-
-## Placement
-
-- Spawn at the emitter's world mount point and size from calibrated bounds.
-- Bias transparent effects toward the camera to avoid z-fighting; check grazing angles for black
-  quads or hard edges.
-- Apply camera shake as a decaying offset on a camera parent, never inside the follow position.
+- `CurveSet` takes one key array per channel. A flattened array type-checks, then fails at texture
+  upload.
+- Create emitters and meshes at load and reuse them. Fire an emitter with `reset()` then `play()`;
+  one-shots use `loop: false`.
+- The first use of a shader stalls a frame. Render each effect once behind a loading or ready screen.
+- Animate values with `setParameter`, not a per-frame `material.update()`.
+- A lit material on a custom mesh needs normals; otherwise use an unlit material.
 
 Fire each effect from real input, and confirm that repeated events keep entity counts stable.

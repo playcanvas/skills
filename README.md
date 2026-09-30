@@ -125,7 +125,7 @@ pinned supported package versions, and Renovate proposes dependency updates.
 | [`configure-animation`](skills/configure-animation/SKILL.md) | Configure clip playback, blending, state graphs, and retargeting from inspected data. |
 | [`assemble-scene`](skills/assemble-scene/SKILL.md) | Compose semantic, visual, collider, physics, and effect hierarchies. |
 | [`light-scene`](skills/light-scene/SKILL.md) | Build coherent lighting, exposure, shadows, reflections, water, and grading. |
-| [`add-effects`](skills/add-effects/SKILL.md) | Add placed, pooled, and lifecycle-safe transient effects and trails. |
+| [`add-effects`](skills/add-effects/SKILL.md) | Choose particles, custom shaders, geometry, or screen effects for transient visuals. |
 | [`verify-pixels`](skills/verify-pixels/SKILL.md) | Prove a rendering change is pixel-identical or bounded before shipping. |
 | [`reduce-draw-calls`](skills/reduce-draw-calls/SKILL.md) | Measure and cut draw calls with element lifecycle, batching, and instancing. |
 | [`override-shader-chunks`](skills/override-shader-chunks/SKILL.md) | Customize StandardMaterial shading with version-pinned shader chunk overrides. |
