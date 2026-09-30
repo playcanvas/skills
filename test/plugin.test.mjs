@@ -219,3 +219,38 @@ test('README documents every shipped skill', () => {
         assert.ok(readme.includes(`[\`${skill}\`](skills/${skill}/SKILL.md)`), skill);
     }
 });
+
+test('skills stay within the context budget', () => {
+    for (const skill of skills) {
+        const text = readFileSync(resolve('skills', skill, 'SKILL.md'), 'utf8');
+        const [, frontmatter, body] = text.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+        const words = (value) => value.split(/\s+/).filter(Boolean).length;
+        assert.ok(words(frontmatter.match(/^description: (.*)$/m)[1]) <= 25, `${skill} description`);
+        assert.ok(words(body) <= 300, `${skill} body`);
+    }
+});
+
+test('README reports current context cost', () => {
+    const readme = readFileSync('README.md', 'utf8');
+
+    // estimated at 4 characters per token
+    const tokens = (text, step) => Math.round(text.length / 4 / step) * step;
+    let meta = '';
+    const sizes = skills.map((skill) => {
+        const text = readFileSync(resolve('skills', skill, 'SKILL.md'), 'utf8');
+        meta += text.match(/^---\n([\s\S]*?)\n---\n/)[1];
+        const size = tokens(text, 50);
+        assert.match(readme, new RegExp(`\\(skills/${skill}/SKILL\\.md\\) \\|[^\\n]*\\| ~${size} \\|`), skill);
+        return size;
+    });
+    const refs = skills.flatMap((skill) => {
+        const root = resolve('skills', skill, 'references');
+        return existsSync(root) ? readdirSync(root).map((file) => tokens(readFileSync(resolve(root, file), 'utf8'), 100)) : [];
+    });
+    const idle = tokens(meta, 100);
+
+    assert.ok(readme.includes(`context-~${idle}_tokens_at_startup`), 'badge');
+    assert.ok(readme.includes(`about ${idle} tokens for all ${skills.length}\nskills`), 'startup');
+    assert.ok(readme.includes(`adding ${Math.min(...sizes)}–${Math.max(...sizes)} tokens`), 'range');
+    assert.ok(readme.includes(`up to ${Math.max(...refs)} tokens`), 'references');
+});

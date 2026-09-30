@@ -4,6 +4,7 @@
 [![Version](https://img.shields.io/github/v/release/playcanvas/skills?include_prereleases&label=version)](https://github.com/playcanvas/skills/releases)
 [![CI](https://github.com/playcanvas/skills/actions/workflows/ci.yml/badge.svg)](https://github.com/playcanvas/skills/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/playcanvas/skills)](LICENSE)
+[![Context](https://img.shields.io/badge/context-~700_tokens_at_startup-blue)](#context-cost)
 [![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white&color=black)](https://discord.gg/RSaMRzg)
 [![Reddit](https://img.shields.io/badge/Reddit-FF4500?style=flat&logo=reddit&logoColor=white&color=black)](https://www.reddit.com/r/PlayCanvas)
 [![X](https://img.shields.io/badge/X-000000?style=flat&logo=x&logoColor=white&color=black)](https://x.com/playcanvas)
@@ -113,23 +114,23 @@ pinned supported package versions, and Renovate proposes dependency updates.
 
 ## Skills
 
-| Skill | Purpose |
-| --- | --- |
-| [`build-app`](skills/build-app/SKILL.md) | Select and structure Direct Engine, React, or Web Components applications. |
-| [`apply-conventions`](skills/apply-conventions/SKILL.md) | Apply stable coordinates, transforms, physics, materials, imports, and verification rules. |
-| [`find-examples`](skills/find-examples/SKILL.md) | Find and adapt official examples matching the installed package version. |
-| [`reuse-scripts`](skills/reuse-scripts/SKILL.md) | Discover and integrate production scripts shipped with the Engine. |
-| [`inspect-glb`](skills/inspect-glb/SKILL.md) | Measure default-pose GLB bounds, transforms, clips, joints, morphs, and hierarchy offline. |
-| [`load-assets`](skills/load-assets/SKILL.md) | Load glTF containers, set up Draco and Basis decoders, and choose compression. |
-| [`calibrate-model`](skills/calibrate-model/SKILL.md) | Record stable scale, grounding, pivot compensation, and yaw for repeated models. |
-| [`configure-animation`](skills/configure-animation/SKILL.md) | Configure clip playback, blending, state graphs, and retargeting from inspected data. |
-| [`assemble-scene`](skills/assemble-scene/SKILL.md) | Compose semantic, visual, collider, physics, and effect hierarchies. |
-| [`light-scene`](skills/light-scene/SKILL.md) | Set lighting, environment, shadows, tone mapping, exposure, and post-processing. |
-| [`add-effects`](skills/add-effects/SKILL.md) | Choose particles, custom shaders, geometry, or screen effects for transient visuals. |
-| [`verify-pixels`](skills/verify-pixels/SKILL.md) | Prove a rendering change is pixel-identical or bounded before shipping. |
-| [`reduce-draw-calls`](skills/reduce-draw-calls/SKILL.md) | Measure and cut draw calls with element lifecycle, batching, and instancing. |
-| [`override-shader-chunks`](skills/override-shader-chunks/SKILL.md) | Customize StandardMaterial shading with version-pinned shader chunk overrides. |
-| [`bake-lighting`](skills/bake-lighting/SKILL.md) | Precompute static lighting with the engine Lightmapper or an offline bake. |
+| Skill | Purpose | Tokens |
+| --- | --- | ---: |
+| [`build-app`](skills/build-app/SKILL.md) | Select and structure Direct Engine, React, or Web Components applications. | ~550 |
+| [`apply-conventions`](skills/apply-conventions/SKILL.md) | Apply stable coordinates, transforms, physics, materials, imports, and verification rules. | ~600 |
+| [`find-examples`](skills/find-examples/SKILL.md) | Find and adapt official examples matching the installed package version. | ~550 |
+| [`reuse-scripts`](skills/reuse-scripts/SKILL.md) | Discover and integrate production scripts shipped with the Engine. | ~450 |
+| [`inspect-glb`](skills/inspect-glb/SKILL.md) | Measure default-pose GLB bounds, transforms, clips, joints, morphs, and hierarchy offline. | ~450 |
+| [`load-assets`](skills/load-assets/SKILL.md) | Load glTF containers, set up Draco and Basis decoders, and choose compression. | ~500 |
+| [`calibrate-model`](skills/calibrate-model/SKILL.md) | Record stable scale, grounding, pivot compensation, and yaw for repeated models. | ~400 |
+| [`configure-animation`](skills/configure-animation/SKILL.md) | Configure clip playback, blending, state graphs, and retargeting from inspected data. | ~400 |
+| [`assemble-scene`](skills/assemble-scene/SKILL.md) | Compose semantic, visual, collider, physics, and effect hierarchies. | ~350 |
+| [`light-scene`](skills/light-scene/SKILL.md) | Set lighting, environment, shadows, tone mapping, exposure, and post-processing. | ~500 |
+| [`add-effects`](skills/add-effects/SKILL.md) | Choose particles, custom shaders, geometry, or screen effects for transient visuals. | ~350 |
+| [`verify-pixels`](skills/verify-pixels/SKILL.md) | Prove a rendering change is pixel-identical or bounded before shipping. | ~400 |
+| [`reduce-draw-calls`](skills/reduce-draw-calls/SKILL.md) | Measure and cut draw calls with element lifecycle, batching, and instancing. | ~450 |
+| [`override-shader-chunks`](skills/override-shader-chunks/SKILL.md) | Customize StandardMaterial shading with version-pinned shader chunk overrides. | ~400 |
+| [`bake-lighting`](skills/bake-lighting/SKILL.md) | Precompute static lighting with the engine Lightmapper or an offline bake. | ~450 |
 
 Every integration loads the same canonical files from [`skills/`](skills/). Host manifests contain
 distribution metadata only.
@@ -137,6 +138,13 @@ distribution metadata only.
 PlayCanvas Skills targets Engine application workflows. It does not automate the PlayCanvas Editor,
 create or publish Editor projects, manage cloud services, or replace project-specific art direction
 and gameplay design.
+
+## Context cost
+
+Agents load only each skill's name and description at session start, about 700 tokens for all 15
+skills. A skill's full instructions load when a task triggers it, adding 350–600 tokens, plus at most
+one surface reference of up to 500 tokens. Estimates assume 4 characters per token. Each skill
+stays within the word budget in [`AGENTS.md`](AGENTS.md).
 
 ## Contributing
 
