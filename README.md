@@ -117,14 +117,15 @@ pinned supported package versions, and Renovate proposes dependency updates.
 | Skill | Purpose | Tokens |
 | --- | --- | ---: |
 | [`build-app`](skills/build-app/SKILL.md) | Select and structure Direct Engine, React, or Web Components applications. | ~550 |
-| [`apply-conventions`](skills/apply-conventions/SKILL.md) | Apply stable coordinates, transforms, physics, materials, imports, and verification rules. | ~600 |
+| [`apply-conventions`](skills/apply-conventions/SKILL.md) | Apply stable coordinates, transforms, physics, materials, imports, and verification rules. | ~550 |
 | [`find-examples`](skills/find-examples/SKILL.md) | Find and adapt official examples matching the installed package version. | ~550 |
 | [`reuse-scripts`](skills/reuse-scripts/SKILL.md) | Discover and integrate production scripts shipped with the Engine. | ~450 |
 | [`inspect-glb`](skills/inspect-glb/SKILL.md) | Measure default-pose GLB bounds, transforms, clips, joints, morphs, and hierarchy offline. | ~450 |
+| [`inspect-runtime`](skills/inspect-runtime/SKILL.md) | Read live app state through the Engine devtools hook without changing app code. | ~550 |
 | [`load-assets`](skills/load-assets/SKILL.md) | Load glTF containers, set up Draco and Basis decoders, and choose compression. | ~500 |
 | [`calibrate-model`](skills/calibrate-model/SKILL.md) | Record stable scale, grounding, pivot compensation, and yaw for repeated models. | ~400 |
-| [`configure-animation`](skills/configure-animation/SKILL.md) | Configure clip playback, blending, state graphs, and retargeting from inspected data. | ~400 |
-| [`assemble-scene`](skills/assemble-scene/SKILL.md) | Compose semantic, visual, collider, physics, and effect hierarchies. | ~350 |
+| [`configure-animation`](skills/configure-animation/SKILL.md) | Configure clip playback, blending, state graphs, and retargeting from inspected data. | ~450 |
+| [`assemble-scene`](skills/assemble-scene/SKILL.md) | Compose semantic, visual, collider, physics, and effect hierarchies. | ~400 |
 | [`light-scene`](skills/light-scene/SKILL.md) | Set lighting, environment, shadows, tone mapping, exposure, and post-processing. | ~500 |
 | [`add-effects`](skills/add-effects/SKILL.md) | Choose particles, custom shaders, geometry, or screen effects for transient visuals. | ~350 |
 | [`verify-pixels`](skills/verify-pixels/SKILL.md) | Prove a rendering change is pixel-identical or bounded before shipping. | ~400 |
@@ -141,8 +142,8 @@ and gameplay design.
 
 ## Context cost
 
-Agents load only each skill's name and description at session start, about 700 tokens for all 15
-skills. A skill's full instructions load when a task triggers it, adding 350–600 tokens, plus at most
+Agents load only each skill's name and description at session start, about 700 tokens for all 16
+skills. A skill's full instructions load when a task triggers it, adding 350–550 tokens, plus at most
 one surface reference of up to 500 tokens. Estimates assume 4 characters per token. Each skill
 stays within the word budget in [`AGENTS.md`](AGENTS.md).
 
