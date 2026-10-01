@@ -38,7 +38,7 @@ const verifyPixels = async (app: AppBase) => {
 void verifyPixels;
 
 const reduceDrawCalls = (app: AppBase, mi: MeshInstance) => {
-    void app.stats.drawCalls;
+    void app.stats.drawCallCount;
     void new MiniStats(app);
     const format = VertexFormat.getDefaultInstancingFormat(app.graphicsDevice);
     const vb = new VertexBuffer(app.graphicsDevice, format, 36, { data: new Float32Array(36 * 16).buffer });
@@ -49,7 +49,7 @@ const reduceDrawCalls = (app: AppBase, mi: MeshInstance) => {
 void reduceDrawCalls;
 
 const overrideChunks = (mat: StandardMaterial) => {
-    mat.shaderChunksVersion = '2.22';
+    mat.shaderChunksVersion = '2.23';
     mat.getShaderChunks(SHADERLANGUAGE_GLSL).set('emissivePS', 'void getEmission() { dEmission = vec3(1.0); }');
     void mat.getShaderChunks(SHADERLANGUAGE_WGSL);
     mat.setParameter('accent', [...new Color(1, 0.5, 0).linear().toArray()]);
@@ -71,7 +71,7 @@ const bakeLighting = (app: AppBase, light: Entity, model: Entity) => {
     app.lightmapper?.bake(null, BAKE_COLORDIR);
     if (model.render) {
         for (const mi of model.render.meshInstances) {
-            void mi.mesh.vertexBuffer.format.elements.some(e => e.name === SEMANTIC_TEXCOORD1);
+            void mi.mesh?.vertexBuffer.format.elements.some(e => e.name === SEMANTIC_TEXCOORD1);
         }
     }
 };
