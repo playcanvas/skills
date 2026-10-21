@@ -1,7 +1,7 @@
 # PlayCanvas Skills
 
-[![Anthropic Directory](https://img.shields.io/badge/Anthropic_Directory-listed-D97757?logo=anthropic&logoColor=white)](#native-plugins)
 [![Skills.sh](https://skills.sh/b/playcanvas/skills)](https://skills.sh/playcanvas/skills)
+[![Anthropic Directory](https://img.shields.io/badge/Anthropic_Directory-listed-D97757?logo=anthropic&logoColor=white)](#native-plugins)
 [![Version](https://img.shields.io/github/v/release/playcanvas/skills?include_prereleases&label=version)](https://github.com/playcanvas/skills/releases)
 [![CI](https://github.com/playcanvas/skills/actions/workflows/ci.yml/badge.svg)](https://github.com/playcanvas/skills/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/playcanvas/skills)](LICENSE)
