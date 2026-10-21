@@ -1,6 +1,7 @@
 # PlayCanvas Skills
 
 [![Skills.sh](https://skills.sh/b/playcanvas/skills)](https://skills.sh/playcanvas/skills)
+[![Anthropic Directory](https://img.shields.io/badge/Anthropic_Directory-listed-D97757?logo=anthropic&logoColor=white)](#native-plugins)
 [![Version](https://img.shields.io/github/v/release/playcanvas/skills?include_prereleases&label=version)](https://github.com/playcanvas/skills/releases)
 [![CI](https://github.com/playcanvas/skills/actions/workflows/ci.yml/badge.svg)](https://github.com/playcanvas/skills/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/playcanvas/skills)](LICENSE)
@@ -28,12 +29,19 @@ Use `--all` to install every skill into all detected agents or `-g` for a user-l
 Start a new conversation after installing or updating so the agent discovers the new skill metadata.
 
 Choose one installation route for each agent. Installing both Agent Skills and a native plugin for
-the same agent exposes duplicate skills.
+the same agent, or the Claude plugin from both the Anthropic Directory and this marketplace, exposes
+duplicate skills.
 
 ### Native plugins
 
 <details>
 <summary><strong>Claude Code and Claude Code desktop</strong></summary>
+<br>
+
+PlayCanvas is listed in the Anthropic Directory. Run `/plugin`, open **Discover**, and search for
+`playcanvas`.
+
+Or install from this repository's marketplace:
 
 ```bash
 claude plugin marketplace add playcanvas/skills
@@ -58,6 +66,7 @@ The Codex app uses the same marketplace and plugin installation.
 
 <details>
 <summary><strong>Cursor</strong></summary>
+<br>
 
 For a single CLI session, load the plugin directly from a checkout:
 
