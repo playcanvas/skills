@@ -36,6 +36,7 @@ duplicate skills.
 
 <details>
 <summary><strong>Claude Code and Claude Code desktop</strong></summary>
+<br>
 
 PlayCanvas is listed in the Anthropic Directory. Run `/plugin`, open **Discover**, and search for
 `playcanvas`.
@@ -65,6 +66,7 @@ The Codex app uses the same marketplace and plugin installation.
 
 <details>
 <summary><strong>Cursor</strong></summary>
+<br>
 
 For a single CLI session, load the plugin directly from a checkout:
 
