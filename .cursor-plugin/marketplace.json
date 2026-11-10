@@ -6,7 +6,7 @@
     },
     "metadata": {
         "description": "Skills for building with PlayCanvas products",
-        "version": "0.6.2"
+        "version": "0.7.0"
     },
     "plugins": [
         {

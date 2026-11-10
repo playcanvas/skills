@@ -1,7 +1,7 @@
 {
     "name": "playcanvas",
     "displayName": "PlayCanvas Engine",
-    "version": "0.6.2",
+    "version": "0.7.0",
     "description": "Skills for building applications with PlayCanvas Engine",
     "author": {
         "name": "PlayCanvas"
