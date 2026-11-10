@@ -1,8 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-// 2.23.0 announces apps only from the debug build; engine#9646 fixes the others
-import { AppBase, AppOptions, NullGraphicsDevice, version } from 'playcanvas/debug';
+import { AppBase, AppOptions, NullGraphicsDevice, version } from 'playcanvas';
 
 const KEY = Symbol.for('playcanvas.inspector');
 const HOOK = '../skills/inspect-runtime/scripts/devtools-hook.js';

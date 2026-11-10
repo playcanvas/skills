@@ -4,7 +4,7 @@ import {
     MeshInstance, MiniStats, SEMANTIC_TEXCOORD1, SHADERLANGUAGE_GLSL, SHADERLANGUAGE_WGSL,
     SHADOWUPDATE_THISFRAME, SKYTYPE_DOME, ShaderChunks, ShaderMaterial, StandardMaterial,
     TONEMAP_NEUTRAL, Texture, VertexBuffer, VertexFormat, WasmModule, WebglGraphicsDevice,
-    basisInitialize
+    basisInitialize, meshoptInitialize
 } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 import { ProceduralSky } from 'playcanvas/scripts/esm/sky/procedural-sky.mjs';
@@ -49,7 +49,7 @@ const reduceDrawCalls = (app: AppBase, mi: MeshInstance) => {
 void reduceDrawCalls;
 
 const overrideChunks = (mat: StandardMaterial) => {
-    mat.shaderChunksVersion = '2.23';
+    mat.shaderChunksVersion = '2.24';
     mat.getShaderChunks(SHADERLANGUAGE_GLSL).set('emissivePS', 'void getEmission() { dEmission = vec3(1.0); }');
     void mat.getShaderChunks(SHADERLANGUAGE_WGSL);
     mat.setParameter('accent', [...new Color(1, 0.5, 0).linear().toArray()]);
@@ -100,6 +100,7 @@ const loadAssets = async (app: AppBase, asset: Asset) => {
     });
     await new Promise((resolve) => WasmModule.getInstance('DracoDecoderModule', resolve));
     basisInitialize({ glueUrl: '/wasm/basis/basis.wasm.js', wasmUrl: '/wasm/basis/basis.wasm.wasm' });
+    meshoptInitialize({ url: '/wasm/meshopt/meshopt_decoder.mjs' });
     await new Promise<void>((resolve) => new AssetListLoader([asset], app.assets).load(() => resolve()));
     const entity = (asset.resource as ContainerResource).instantiateRenderEntity();
     const texture = new Texture(app.graphicsDevice);
