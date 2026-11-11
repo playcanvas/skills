@@ -55,17 +55,3 @@ jobs:
                   tag_name: ${{ steps.version.outputs.tag }}
                   generate_release_notes: true
                   prerelease: ${{ startsWith(steps.version.outputs.tag, 'v0.') }}
-
-            - name: Generate app token
-              id: app-token
-              uses: actions/create-github-app-token@v3
-              with:
-                  app-id: ${{ secrets.APP_ID }}
-                  private-key: ${{ secrets.APP_KEY }}
-                  owner: playcanvas
-                  repositories: create-playcanvas
-
-            - name: Sync create-playcanvas skills
-              env:
-                  GH_TOKEN: ${{ steps.app-token.outputs.token }}
-              run: gh api --method POST repos/playcanvas/create-playcanvas/dispatches -f event_type=skills-release
