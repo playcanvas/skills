@@ -108,6 +108,8 @@ Polish this @playcanvas/react prototype with compressed assets, reused Engine sc
 effects, deliberate lighting and tone mapping, and screenshot checks.
 ```
 
+Coding agents: start from the [PlayCanvas documentation index](https://developer.playcanvas.com/llms.txt), which leads to a Markdown version of every guide and API page.
+
 ## Supported surfaces
 
 The skills resolve the active surface from imports and markup, then read only its matching reference:
