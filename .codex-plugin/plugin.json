@@ -1,0 +1,29 @@
+{
+    "name": "playcanvas",
+    "version": "0.7.1",
+    "description": "Skills for building applications with PlayCanvas Engine",
+    "author": {
+        "name": "PlayCanvas",
+        "url": "https://playcanvas.com"
+    },
+    "homepage": "https://playcanvas.com",
+    "repository": "https://github.com/playcanvas/skills",
+    "license": "MIT",
+    "keywords": ["playcanvas", "3d", "webgl", "webgpu", "game-engine"],
+    "skills": "./skills/",
+    "interface": {
+        "displayName": "PlayCanvas Engine",
+        "shortDescription": "Build apps with PlayCanvas",
+        "longDescription": "Use current PlayCanvas Engine, React, and Web Components patterns for examples, scripts, models, animation, and scene assembly.",
+        "developerName": "PlayCanvas",
+        "category": "Developer Tools",
+        "capabilities": ["skills"],
+        "defaultPrompt": "Help me build this application with PlayCanvas Engine.",
+        "websiteURL": "https://playcanvas.com",
+        "supportURL": "https://github.com/playcanvas/skills/issues/new?template=skill-feedback.yml",
+        "privacyPolicyURL": "https://playcanvas.com/privacy",
+        "termsOfServiceURL": "https://playcanvas.com/terms",
+        "logo": "./assets/logo.png",
+        "composerIcon": "./assets/logo.png"
+    }
+}
