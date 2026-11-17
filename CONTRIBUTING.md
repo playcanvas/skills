@@ -48,4 +48,5 @@ runtime behavior changes.
 
 Run the **Publish** workflow from `main` in GitHub Actions and choose `patch`, `minor`, or `major`.
 It bumps `package.json` and every plugin manifest, pushes the release commit and tag, and creates
-the GitHub release.
+the GitHub release. It then commits `plugins/playcanvas/` as the root of the `directory` branch,
+which the Anthropic Directory tracks; never edit that branch by hand.
