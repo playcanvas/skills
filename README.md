@@ -71,12 +71,12 @@ The Codex app uses the same marketplace and plugin installation.
 For a single CLI session, load the plugin directly from a checkout:
 
 ```bash
-cursor-agent --plugin-dir .
+cursor-agent --plugin-dir plugins/playcanvas
 ```
 
 For a persistent installation, add this repository as a plugin marketplace in Cursor or link the
-repository root into `~/.cursor/plugins/local/playcanvas`. Teams and Enterprise organizations can
-publish the same marketplace to their organization.
+`plugins/playcanvas` folder into `~/.cursor/plugins/local/playcanvas`. Teams and Enterprise
+organizations can publish the same marketplace to their organization.
 
 </details>
 
@@ -127,25 +127,26 @@ pinned supported package versions, and Renovate proposes dependency updates.
 
 | Skill | Purpose | Tokens |
 | --- | --- | ---: |
-| [`build-app`](skills/build-app/SKILL.md) | Select and structure Direct Engine, React, or Web Components applications. | ~550 |
-| [`apply-conventions`](skills/apply-conventions/SKILL.md) | Apply stable coordinates, transforms, physics, materials, imports, and verification rules. | ~550 |
-| [`find-examples`](skills/find-examples/SKILL.md) | Find and adapt official examples matching the installed package version. | ~600 |
-| [`reuse-scripts`](skills/reuse-scripts/SKILL.md) | Discover and integrate production scripts shipped with the Engine. | ~450 |
-| [`inspect-glb`](skills/inspect-glb/SKILL.md) | Measure default-pose GLB bounds, transforms, clips, joints, morphs, and hierarchy offline. | ~450 |
-| [`inspect-runtime`](skills/inspect-runtime/SKILL.md) | Read live app state through the Engine devtools hook without changing app code. | ~550 |
-| [`load-assets`](skills/load-assets/SKILL.md) | Load glTF containers, set up Draco and Basis decoders, and choose compression. | ~600 |
-| [`calibrate-model`](skills/calibrate-model/SKILL.md) | Record stable scale, grounding, pivot compensation, and yaw for repeated models. | ~400 |
-| [`configure-animation`](skills/configure-animation/SKILL.md) | Configure clip playback, blending, state graphs, and retargeting from inspected data. | ~450 |
-| [`assemble-scene`](skills/assemble-scene/SKILL.md) | Compose semantic, visual, collider, physics, and effect hierarchies. | ~400 |
-| [`light-scene`](skills/light-scene/SKILL.md) | Set lighting, environment, shadows, tone mapping, exposure, and post-processing. | ~500 |
-| [`add-effects`](skills/add-effects/SKILL.md) | Choose particles, custom shaders, geometry, or screen effects for transient visuals. | ~350 |
-| [`verify-pixels`](skills/verify-pixels/SKILL.md) | Prove a rendering change is pixel-identical or bounded before shipping. | ~400 |
-| [`reduce-draw-calls`](skills/reduce-draw-calls/SKILL.md) | Measure and cut draw calls with element lifecycle, batching, and instancing. | ~450 |
-| [`override-shader-chunks`](skills/override-shader-chunks/SKILL.md) | Customize StandardMaterial shading with version-pinned shader chunk overrides. | ~400 |
-| [`bake-lighting`](skills/bake-lighting/SKILL.md) | Precompute static lighting with the engine Lightmapper or an offline bake. | ~450 |
+| [`build-app`](plugins/playcanvas/skills/build-app/SKILL.md) | Select and structure Direct Engine, React, or Web Components applications. | ~550 |
+| [`apply-conventions`](plugins/playcanvas/skills/apply-conventions/SKILL.md) | Apply stable coordinates, transforms, physics, materials, imports, and verification rules. | ~550 |
+| [`find-examples`](plugins/playcanvas/skills/find-examples/SKILL.md) | Find and adapt official examples matching the installed package version. | ~600 |
+| [`reuse-scripts`](plugins/playcanvas/skills/reuse-scripts/SKILL.md) | Discover and integrate production scripts shipped with the Engine. | ~450 |
+| [`inspect-glb`](plugins/playcanvas/skills/inspect-glb/SKILL.md) | Read GLB clips, joints, hierarchy, morphs, and compression, and measure exact bounds. | ~450 |
+| [`inspect-runtime`](plugins/playcanvas/skills/inspect-runtime/SKILL.md) | Read live app state through the Engine devtools hook without changing app code. | ~600 |
+| [`load-assets`](plugins/playcanvas/skills/load-assets/SKILL.md) | Load glTF containers, set up Draco and Basis decoders, and choose compression. | ~600 |
+| [`calibrate-model`](plugins/playcanvas/skills/calibrate-model/SKILL.md) | Record stable scale, grounding, pivot compensation, and yaw for repeated models. | ~400 |
+| [`configure-animation`](plugins/playcanvas/skills/configure-animation/SKILL.md) | Configure clip playback, blending, state graphs, and retargeting from inspected data. | ~400 |
+| [`assemble-scene`](plugins/playcanvas/skills/assemble-scene/SKILL.md) | Compose semantic, visual, collider, physics, and effect hierarchies. | ~400 |
+| [`light-scene`](plugins/playcanvas/skills/light-scene/SKILL.md) | Set lighting, environment, shadows, tone mapping, exposure, and post-processing. | ~500 |
+| [`add-effects`](plugins/playcanvas/skills/add-effects/SKILL.md) | Choose particles, custom shaders, geometry, or screen effects for transient visuals. | ~350 |
+| [`verify-pixels`](plugins/playcanvas/skills/verify-pixels/SKILL.md) | Prove a rendering change is pixel-identical or bounded before shipping. | ~400 |
+| [`reduce-draw-calls`](plugins/playcanvas/skills/reduce-draw-calls/SKILL.md) | Measure and cut draw calls with element lifecycle, batching, and instancing. | ~450 |
+| [`override-shader-chunks`](plugins/playcanvas/skills/override-shader-chunks/SKILL.md) | Customize StandardMaterial shading with version-pinned shader chunk overrides. | ~400 |
+| [`bake-lighting`](plugins/playcanvas/skills/bake-lighting/SKILL.md) | Precompute static lighting with the engine Lightmapper or an offline bake. | ~450 |
 
-Every integration loads the same canonical files from [`skills/`](skills/). Host manifests contain
-distribution metadata only.
+Every integration loads the same canonical files from
+[`plugins/playcanvas/skills/`](plugins/playcanvas/skills/). Host manifests contain distribution
+metadata only.
 
 PlayCanvas Skills targets Engine application workflows. It does not automate the PlayCanvas Editor,
 create or publish Editor projects, manage cloud services, or replace project-specific art direction
@@ -160,12 +161,13 @@ stays within the word budget in [`AGENTS.md`](AGENTS.md).
 
 ## Data and network use
 
-The skills collect, store, and send no user data, and the plugin has no hooks or MCP servers. A few
-skills tell the agent to run commands on the user's machine:
+The skills collect, store, and send no user data, and the plugin ships only Markdown, JSON, and
+images: no scripts, hooks, or MCP servers. A few skills tell the agent to run commands on the user's
+machine:
 
-- `inspect-glb` runs its bundled `scripts/inspect.mjs` on local GLB files. For compressed files it
-  runs `npx --yes @gltf-transform/cli@4.4.2`, which downloads that pinned package from npm.
-- `inspect-runtime` injects its bundled `scripts/devtools-hook.js` into the app's own page.
+- `inspect-glb` reads the JSON chunk of local GLB files with Node and measures bounds in the
+  running app.
+- `inspect-runtime` injects a short devtools hook snippet into the app's own page.
 - `find-examples` reads official examples from the public `playcanvas/engine`,
   `playcanvas/web-components`, and `playcanvas/developer-site` repositories with `gh api` when they
   are not installed locally.

@@ -6,15 +6,15 @@ agreed before implementation.
 
 ## Skill changes
 
-- Keep canonical guidance agent-agnostic under `skills/`.
+- Keep canonical guidance agent-agnostic under `plugins/playcanvas/skills/`.
 - Put surface-specific details in the existing Direct Engine, React, or Web Components reference.
 - Prefer installed package declarations, exports, shipped scripts, and official examples over copied
   snippets or assumed latest APIs.
-- Keep `SKILL.md` concise and imperative. Add scripts only for deterministic work that agents would
-  otherwise reimplement.
+- Keep `SKILL.md` concise and imperative. Ship no scripts: the plugin folder holds only Markdown,
+  text, JSON, YAML, and images.
 - Add the smallest repeatable proof for non-trivial behavior.
 - When adding or removing a skill, update its README entry and the explicit `skills` inventory in
-  `.claude-plugin/plugin.json`.
+  `plugins/playcanvas/.claude-plugin/plugin.json`.
 
 ## Checks
 
@@ -32,12 +32,12 @@ Direct Engine, React, and Web Components examples against pinned packages.
 Validate every skill against the Agent Skills specification before opening a pull request:
 
 ```sh
-for skill in skills/*; do
+for skill in plugins/playcanvas/skills/*; do
     uvx --from skills-ref==0.1.1 agentskills validate "$skill"
 done
 ```
 
-Test dependencies live in `test/package.json` so the plugin root ships no lockfile and plugin
+Test dependencies live in `test/package.json` so the plugin folder ships no lockfile and plugin
 installs fetch no packages.
 
 Pull requests should explain the user-visible failure or workflow being improved, identify the

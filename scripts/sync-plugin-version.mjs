@@ -2,9 +2,9 @@ import { readFileSync, writeFileSync } from 'node:fs';
 
 const SOURCE = 'package.json';
 const MANIFESTS = [
-    '.codex-plugin/plugin.json',
-    '.cursor-plugin/plugin.json',
-    '.claude-plugin/plugin.json',
+    'plugins/playcanvas/.codex-plugin/plugin.json',
+    'plugins/playcanvas/.cursor-plugin/plugin.json',
+    'plugins/playcanvas/.claude-plugin/plugin.json',
     '.claude-plugin/marketplace.json',
     '.cursor-plugin/marketplace.json'
 ];

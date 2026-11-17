@@ -10,7 +10,7 @@
     "plugins": [
         {
             "name": "playcanvas",
-            "source": "./",
+            "source": "./plugins/playcanvas",
             "description": "Skills for building applications with PlayCanvas Engine",
             "category": "development",
             "keywords": ["playcanvas", "3d", "webgl", "webgpu", "game-engine"]

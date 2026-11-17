@@ -5,14 +5,18 @@ Cursor, and Agent Skills-compatible installers.
 
 ## Repository layout
 
-- `skills/<name>/SKILL.md` is the canonical skill source. Every direct child of `skills/` ships.
+- `plugins/playcanvas/` is the plugin every host installs. Its `skills/<name>/SKILL.md` is the
+  canonical skill source, and every direct child of `skills/` ships.
 - Surface-specific guidance belongs in a skill's `references/` directory.
-- `.claude-plugin/`, `.codex-plugin/`, and `.cursor-plugin/` contain host distribution metadata.
-- `.agents/plugins/marketplace.json` is the Codex marketplace manifest.
+- `plugins/playcanvas/.claude-plugin/`, `.codex-plugin/`, and `.cursor-plugin/` contain host
+  distribution metadata. The root `.claude-plugin/`, `.cursor-plugin/`, and `.agents/plugins/`
+  hold the marketplaces.
 - `scripts/` and `test/` contain release, contract, and runtime verification.
 
-Keep skills directly under `skills/`. Nested category buckets are not part of this repository's
-contract because the native Codex plugin validates direct skill children.
+Keep only Markdown, text, JSON, YAML, and images in `plugins/playcanvas/`; the Anthropic Directory
+refuses scripts and package files there. Keep skills directly under `skills/`. Nested category
+buckets are not part of this repository's contract because the native Codex plugin validates direct
+skill children.
 
 ## Skill changes
 
@@ -21,13 +25,13 @@ contract because the native Codex plugin validates direct skill children.
 - Keep `SKILL.md` frontmatter to `name` and `description`; the name must match its directory.
 - Prefer installed package declarations, exports, shipped scripts, and official examples over copied
   snippets or assumed APIs.
-- Add deterministic scripts only when agents would otherwise need to reimplement the same work.
+- Do not ship scripts. Put short code agents need in the skill as a snippet.
 - Keep skills short: descriptions ≤ 25 words, `SKILL.md` bodies ≤ 300 words. State engine facts and
   gotchas, not process or taste; cross-reference a rule instead of restating it.
 - Keep skills task-agnostic. Describe Engine capabilities, defaults, and gotchas that help with any
   task; do not describe specific use cases, genres, or example scenes.
 - When adding or removing a skill, update the top-level README and the Claude plugin's explicit
-  `skills` inventory.
+  `skills` inventory in `plugins/playcanvas/.claude-plugin/plugin.json`.
 
 ## Verification
 
