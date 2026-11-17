@@ -1,10 +1,16 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import test from 'node:test';
 
 import { AppBase, AppOptions, NullGraphicsDevice, version } from 'playcanvas';
 
 const KEY = Symbol.for('playcanvas.inspector');
-const HOOK = '../skills/inspect-runtime/scripts/devtools-hook.js';
+const SKILL = resolve(import.meta.dirname, '../plugins/playcanvas/skills/inspect-runtime/SKILL.md');
+
+// the hook ships as the skill's js snippet; each tag forces a fresh evaluation
+const hook = readFileSync(SKILL, 'utf8').match(/```js\n([\s\S]*?)```/)[1];
+const inject = (tag = '') => import(`data:text/javascript,${encodeURIComponent(`${hook}//${tag}`)}`);
 
 // stands in for a hook a devtools extension defined first
 const seen = [];
@@ -12,7 +18,7 @@ globalThis[KEY] = {
     register: (app) => seen.push(['register', app]),
     unregister: (app) => seen.push(['unregister', app])
 };
-await import(HOOK);
+await inject();
 const installed = globalThis[KEY];
 
 const create = (devtools) => {
@@ -49,7 +55,7 @@ test('chains the earlier hook', () => {
 });
 
 test('installs once when injected again', async () => {
-    await import(`${HOOK}?again`);
+    await inject('again');
     assert.equal(globalThis[KEY], installed);
 
     seen.length = 0;

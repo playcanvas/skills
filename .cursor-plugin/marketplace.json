@@ -11,7 +11,7 @@
     "plugins": [
         {
             "name": "playcanvas",
-            "source": "./",
+            "source": "./plugins/playcanvas",
             "description": "Skills for building applications with PlayCanvas Engine"
         }
     ]

@@ -12,9 +12,8 @@ Get clip and joint names from `inspect-glb`; never guess them.
 - Put the `anim` component on or above the rendered skinned hierarchy, not on a separate pivot.
 - Clamp every 1D blend parameter to its first and last child points. The Engine does not; values
   outside the span zero every weight and can make synced speeds non-finite, freezing the pose.
-- Retarget only when each source `animationTargets` path, minus its `.translation`, `.rotation`,
-  `.scale`, or `.weights` suffix, matches a destination `nodePaths` entry below the model root.
-  Equal joint counts or similar names are not enough.
+- Retarget only when the name path of every node a source clip's channels target matches a
+  destination node path below the model root. Equal joint counts or similar names are not enough.
 - Scale a wrapper, never skinned bones.
 
 ## Prove playback

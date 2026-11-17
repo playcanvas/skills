@@ -5,13 +5,13 @@ description: Use before repeatedly placing GLB models in PlayCanvas to record ea
 
 # Model calibration
 
-Measure each unique GLB once with `inspect-glb`, only trusting bounds when `boundsSource` is
-`vertices`, and keep one tuning record per asset:
+Measure each unique GLB once with `inspect-glb`, from vertices rather than accessor or AABB boxes,
+and keep one tuning record per asset:
 
 ```ts
 const ASSET_TUNING = {
     model: {
-        boundsSource: 'vertices', dims: [8, 7, 18], center: [0, 2.5, 0], groundOffset: 1,
+        dims: [8, 7, 18], center: [0, 2.5, 0], groundOffset: 1,
         intended: { dimension: 'length', size: 18 }, scale: 1, y: 1, yaw: 180
     }
 } as const;

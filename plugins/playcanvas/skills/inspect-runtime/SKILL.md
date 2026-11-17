@@ -5,30 +5,51 @@ description: Use when reading state from a running PlayCanvas app, to reach its 
 
 # Inspect a running app
 
-From Engine 2.23, every app announces itself to a hook at
-`globalThis[Symbol.for('playcanvas.inspector')]`. Read live state through it instead of adding
-`window.app` or debug code to the app.
+From Engine 2.23, every app announces itself to the hook below. Read live state through it, not
+`window.app` or debug code.
 
 ## Attach
 
-- Resolve `scripts/devtools-hook.js` relative to this skill and inject it as an init script that
-  runs before any page script. A hook defined later misses existing apps; reload instead.
-- Page code then reads `globalThis.__playcanvasApps`, a `Map` from each live app to
-  `{ version, revision, protocol }`. `app.init()` adds the entry and `app.destroy()` removes it.
-- The script chains a hook defined before it, such as a devtools extension's.
+Inject this as an init script, before any page script; a later hook misses existing apps. It chains
+an earlier hook, such as a devtools extension's:
+
+```js
+{
+    const key = Symbol.for('playcanvas.inspector');
+    const prev = globalThis[key];
+    const apps = (globalThis.__playcanvasApps ??= new Map());
+
+    if (!prev?.playcanvasApps) {
+        globalThis[key] = {
+            playcanvasApps: apps,
+            register(app, info) {
+                apps.set(app, info);
+                prev?.register?.(app, info);
+            },
+            unregister(app) {
+                apps.delete(app);
+                prev?.unregister?.(app);
+            }
+        };
+    }
+}
+```
+
+- `globalThis.__playcanvasApps` maps each live app to `{ version, revision, protocol }` from
+  `app.init()` until `app.destroy()`.
 - No entry means the Engine predates 2.23, is a non-debug 2.23.0 build, the hook loaded late, or
   the app set `devtools: false`. The Engine swallows hook errors.
 
 ## Read state
 
 - Read after `frameend`, so values reflect a rendered frame.
-- Return plain numbers and strings to the caller, not Engine objects.
+- Return plain values, not Engine objects.
 - Useful reads: `app.root.findByName()` and `findByTag()`, world positions and
   `meshInstance.aabb`, `app.stats.drawCallCount` and `frameTime`, and
   `entity.anim.baseLayer.activeState`.
 - Pause with `app.timeScale = 0`; `update` still runs with a zero `dt`. Step one frame by restoring
   the scale, then zeroing it again on the next `frameend`.
-- Revert anything you change to take a measurement.
+- Revert any change made to measure.
 
 ## Inspector panel
 

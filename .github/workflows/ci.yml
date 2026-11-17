@@ -48,9 +48,11 @@ jobs:
 
       - name: Validate canonical skills
         run: |
-          for skill in skills/*; do
+          for skill in plugins/playcanvas/skills/*; do
             agentskills validate "$skill"
           done
 
       - name: Validate Claude plugin
-        run: npx -y @anthropic-ai/claude-code@2.1.296 plugin validate . --strict
+        run: |
+          npx -y @anthropic-ai/claude-code@2.1.296 plugin validate . --strict
+          npx -y @anthropic-ai/claude-code@2.1.296 plugin validate plugins/playcanvas --strict

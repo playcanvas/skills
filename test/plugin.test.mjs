@@ -6,6 +6,8 @@ import test from 'node:test';
 // repo-relative paths below resolve from the repository root
 process.chdir(resolve(import.meta.dirname, '..'));
 
+const PLUGIN = 'plugins/playcanvas';
+
 const semver = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 const codexFields = new Set([
     'id', 'name', 'version', 'description', 'skills', 'apps', 'mcpServers', 'interface',
@@ -90,14 +92,14 @@ test('plugin versions match across hosts and versioned marketplaces', () => {
 });
 
 test('claude plugin ships the canonical skill inventory', () => {
-    const data = JSON.parse(readFileSync('.claude-plugin/plugin.json'));
+    const data = JSON.parse(readFileSync(resolve(PLUGIN, '.claude-plugin/plugin.json')));
 
     assert.deepEqual(data.skills.map((file) => basename(file)).sort(), skills);
-    for (const file of data.skills) assert.ok(existsSync(resolve(file, 'SKILL.md')), file);
+    for (const file of data.skills) assert.ok(existsSync(resolve(PLUGIN, file, 'SKILL.md')), file);
 });
 
 test('codex plugin and marketplace match ingestion contracts', () => {
-    const root = resolve('.');
+    const root = resolve(PLUGIN);
     const data = JSON.parse(readFileSync(resolve(root, '.codex-plugin/plugin.json')));
     const market = maps.find(({ name }) => name === 'codex').data;
 
@@ -139,8 +141,18 @@ test('codex plugin and marketplace match ingestion contracts', () => {
     }
 });
 
+// the anthropic directory refuses other files from unverified organizations
+test('plugin folder ships only text, data, and image files', () => {
+    for (const entry of readdirSync(PLUGIN, { recursive: true, withFileTypes: true })) {
+        if (!entry.isFile() || entry.name === '.DS_Store') continue;
+        const file = resolve(entry.parentPath, entry.name);
+        assert.match(entry.name, /\.(md|txt|json|ya?ml|png|jpe?g|gif|webp|ico)$/, file);
+        assert.ok(!readFileSync(file, 'latin1').startsWith('#!'), file);
+    }
+});
+
 test('canonical skills contain no host-specific instructions', () => {
-    const root = resolve('skills');
+    const root = resolve(PLUGIN, 'skills');
 
     for (const file of readdirSync(root, { recursive: true })) {
         if (file.endsWith('.md')) {
@@ -156,7 +168,7 @@ test('canonical skills contain no host-specific instructions', () => {
 test('framework-aware skills treat every authoring surface equally', () => {
     for (const skill of adapted) {
         assert.deepEqual(
-            readdirSync(resolve('skills', skill, 'references')).sort(),
+            readdirSync(resolve(PLUGIN, 'skills', skill, 'references')).sort(),
             surfaces,
             skill
         );
@@ -164,7 +176,7 @@ test('framework-aware skills treat every authoring surface equally', () => {
 });
 
 test('calibration references preserve yaw and pivot compensation', () => {
-    const root = resolve('skills/calibrate-model/references');
+    const root = resolve(PLUGIN, 'skills/calibrate-model/references');
     const refs = Object.fromEntries(surfaces.map((file) => [file, readFileSync(resolve(root, file), 'utf8')]));
 
     for (const [file, src] of Object.entries(refs)) {
@@ -178,7 +190,7 @@ test('calibration references preserve yaw and pivot compensation', () => {
 
 test('plugin exposes the intended task-oriented skills', () => {
     assert.deepEqual(
-        readdirSync('skills', { withFileTypes: true })
+        readdirSync(resolve(PLUGIN, 'skills'), { withFileTypes: true })
             .filter((entry) => entry.isDirectory())
             .map((entry) => entry.name)
             .sort(),
@@ -188,7 +200,7 @@ test('plugin exposes the intended task-oriented skills', () => {
 
 test('skill metadata is portable and matches its folder', () => {
     for (const skill of skills) {
-        const file = resolve('skills', skill, 'SKILL.md');
+        const file = resolve(PLUGIN, 'skills', skill, 'SKILL.md');
         const frontmatter = readFileSync(file, 'utf8').match(/^---\n([\s\S]*?)\n---\n/)?.[1];
         assert.ok(frontmatter, skill);
         const data = Object.fromEntries(frontmatter.split('\n').map((line) => {
@@ -203,7 +215,7 @@ test('skill metadata is portable and matches its folder', () => {
 });
 
 test('local links in skill documentation resolve', () => {
-    const root = resolve('skills');
+    const root = resolve(PLUGIN, 'skills');
 
     for (const name of readdirSync(root, { recursive: true })) {
         if (!name.endsWith('.md')) continue;
@@ -219,13 +231,13 @@ test('README documents every shipped skill', () => {
     const readme = readFileSync('README.md', 'utf8');
 
     for (const skill of skills) {
-        assert.ok(readme.includes(`[\`${skill}\`](skills/${skill}/SKILL.md)`), skill);
+        assert.ok(readme.includes(`[\`${skill}\`](${PLUGIN}/skills/${skill}/SKILL.md)`), skill);
     }
 });
 
 test('skills stay within the context budget', () => {
     for (const skill of skills) {
-        const text = readFileSync(resolve('skills', skill, 'SKILL.md'), 'utf8');
+        const text = readFileSync(resolve(PLUGIN, 'skills', skill, 'SKILL.md'), 'utf8');
         const [, frontmatter, body] = text.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
         const words = (value) => value.split(/\s+/).filter(Boolean).length;
         assert.ok(words(frontmatter.match(/^description: (.*)$/m)[1]) <= 25, `${skill} description`);
@@ -240,14 +252,14 @@ test('README reports current context cost', () => {
     const tokens = (text, step) => Math.round(text.length / 4 / step) * step;
     let meta = '';
     const sizes = skills.map((skill) => {
-        const text = readFileSync(resolve('skills', skill, 'SKILL.md'), 'utf8');
+        const text = readFileSync(resolve(PLUGIN, 'skills', skill, 'SKILL.md'), 'utf8');
         meta += text.match(/^---\n([\s\S]*?)\n---\n/)[1];
         const size = tokens(text, 50);
-        assert.match(readme, new RegExp(`\\(skills/${skill}/SKILL\\.md\\) \\|[^\\n]*\\| ~${size} \\|`), skill);
+        assert.match(readme, new RegExp(`\\(${PLUGIN}/skills/${skill}/SKILL\\.md\\) \\|[^\\n]*\\| ~${size} \\|`), skill);
         return size;
     });
     const refs = skills.flatMap((skill) => {
-        const root = resolve('skills', skill, 'references');
+        const root = resolve(PLUGIN, 'skills', skill, 'references');
         return existsSync(root) ? readdirSync(root).map((file) => tokens(readFileSync(resolve(root, file), 'utf8'), 100)) : [];
     });
     const idle = tokens(meta, 100);
